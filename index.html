@@ -17,25 +17,25 @@
         body {
             font-family: 'Segoe UI', sans-serif;
             max-width: 850px;
-            margin: 20px auto;
+            margin: 10px auto;
             background: #f0f2f5;
-            padding: 15px;
+            padding: 10px;
         }
 
         .container {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         /* Timers */
         .timers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .timer-card {
@@ -44,14 +44,13 @@
             padding: 15px;
             border-radius: 10px;
             text-align: center;
-            transition: background 0.3s;
         }
 
         .timer-display {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-family: monospace;
             color: #00ff00;
-            margin: 10px 0;
+            margin: 5px 0;
         }
 
         @keyframes blinker {
@@ -61,21 +60,22 @@
         }
 
         .timer-card.alarm-active {
-            animation: blinker 0.6s linear infinite;
+            animation: blinker 0.4s linear infinite;
         }
 
-        /* Interface */
+        /* Interface Mobile */
         .input-row {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
 
         input {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: 2px solid #ddd;
             border-radius: 8px;
+            font-size: 16px;
         }
 
         button {
@@ -83,8 +83,7 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
-            padding: 8px 12px;
+            padding: 10px;
         }
 
         .btn-add {
@@ -96,27 +95,23 @@
             background: var(--red);
             color: white;
             width: 35px;
-            height: 35px;
         }
 
         .btn-plus {
             background: var(--blue);
             color: white;
             width: 35px;
-            height: 35px;
         }
 
         .btn-remove {
             background: var(--red);
             color: white;
-            min-width: 90px;
+            font-size: 0.8em;
         }
 
         .btn-remove:disabled {
-            background: #e9ecef;
-            color: #adb5bd;
-            cursor: not-allowed;
-            border: 1px solid #dee2e6;
+            background: #ccc;
+            opacity: 0.5;
         }
 
         .btn-finish {
@@ -125,7 +120,7 @@
             width: 100%;
             padding: 15px;
             font-size: 1.1em;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         ul {
@@ -137,7 +132,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
             border-bottom: 1px solid #eee;
             background: #fff;
             margin-bottom: 5px;
@@ -147,17 +142,16 @@
 
         .qty {
             font-weight: bold;
-            min-width: 30px;
+            min-width: 25px;
             text-align: center;
-            font-size: 1.2em;
         }
 
         .result-box {
             background: #e7f3ff;
-            border-left: 6px solid var(--blue);
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
+            border-left: 5px solid var(--blue);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
         }
@@ -165,9 +159,10 @@
         .history-card {
             background: #fff;
             border: 1px solid #ddd;
-            padding: 15px;
+            padding: 10px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -177,42 +172,40 @@
     <div class="timers-grid">
         <div class="timer-card" id="t10">
             <div class="timer-display">10:00</div>
-            <button onclick="toggleTimer('t10', 600)" style="background:var(--green); color:white">Play/Pause</button>
+            <button onclick="toggleTimer('t10', 600)" style="background:var(--green); color:white">Play/Pausa</button>
             <button onclick="resetIndividual('t10', 600)" style="background:var(--gray); color:white">Reset</button>
         </div>
         <div class="timer-card" id="t7">
             <div class="timer-display">07:00</div>
-            <button onclick="toggleTimer('t7', 420)" style="background:var(--green); color:white">Play/Pause</button>
+            <button onclick="toggleTimer('t7', 420)" style="background:var(--green); color:white">Play/Pausa</button>
             <button onclick="resetIndividual('t7', 420)" style="background:var(--gray); color:white">Reset</button>
         </div>
         <div class="timer-card" id="t2">
             <div class="timer-display">02:00</div>
-            <button onclick="toggleTimer('t2', 120)" style="background:var(--green); color:white">Play/Pause</button>
+            <button onclick="toggleTimer('t2', 120)" style="background:var(--green); color:white">Play/Pausa</button>
             <button onclick="resetIndividual('t2', 120)" style="background:var(--gray); color:white">Reset</button>
         </div>
     </div>
 
     <div class="container">
         <div class="input-row">
-            <input type="text" id="nomeInput" placeholder="Nome do jogador..."
-                onkeypress="if(event.key==='Enter') add()">
-            <button class="btn-add" onclick="add()">Adicionar Jogador</button>
+            <input type="text" id="nomeInput" placeholder="Jogador..." autocomplete="off">
+            <button class="btn-add" onclick="add()">Add</button>
         </div>
         <ul id="lista"></ul>
         <div id="calculoAtual" style="display:none">
             <hr>
-            <h3>Distribuição em Tempo Real</h3>
-            <p>Total de Entradas: <strong id="totalTxt">0</strong></p>
+            <p>Total Entradas: <strong id="totalTxt">0</strong></p>
             <div id="dist"></div>
             <button class="btn-finish" onclick="finalizarPartida()">Finalizar Partida</button>
         </div>
     </div>
 
     <div class="container" id="historicoSection" style="display:none">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; justify-content:space-between;">
             <h3>Histórico</h3>
-            <button onclick="limparHistorico()" style="background:var(--gray); color:white; font-size:0.8em">Limpar
-                Tudo</button>
+            <button onclick="limparHistorico()"
+                style="background:var(--gray); color:white; font-size:0.7em">Limpar</button>
         </div>
         <div id="historicoLista"></div>
     </div>
@@ -221,6 +214,8 @@
         let jogadores = JSON.parse(localStorage.getItem('poker_jogadores')) || [];
         let historico = JSON.parse(localStorage.getItem('poker_historico')) || [];
         let startTimePartida = localStorage.getItem('poker_startTime') ? new Date(localStorage.getItem('poker_startTime')) : null;
+
+        // ÁUDIO CONTEXT (Crucial para Mobile)
         let audioCtx = null;
 
         const timersData = {
@@ -231,6 +226,32 @@
 
         window.onload = () => { render(); renderHistorico(); };
 
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                // Toca um silêncio rápido para desbloquear o áudio no iOS/Android
+                const buffer = audioCtx.createBuffer(1, 1, 22050);
+                const source = audioCtx.createBufferSource();
+                source.buffer = buffer;
+                source.connect(audioCtx.destination);
+                source.start(0);
+            }
+        }
+
+        function playBeep() {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Frequência mais alta para ouvir melhor
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3); // Beep curto
+        }
+
         function saveToLocal() {
             localStorage.setItem('poker_jogadores', JSON.stringify(jogadores));
             localStorage.setItem('poker_historico', JSON.stringify(historico));
@@ -239,9 +260,12 @@
         }
 
         function toggleTimer(id, initialSecs) {
+            initAudio(); // Ativa o áudio no primeiro clique do usuário
             const t = timersData[id];
             const card = document.getElementById(id);
+
             if (!startTimePartida) { startTimePartida = new Date(); saveToLocal(); render(); }
+
             if (t.running) {
                 clearInterval(t.interval);
                 t.running = false;
@@ -249,24 +273,24 @@
                 if (t.timeLeft <= 0) return;
                 t.running = true;
                 t.interval = setInterval(() => {
-                    if (t.timeLeft > 0) { t.timeLeft--; updateTimerDisplay(id); }
-                    else {
-                        clearInterval(t.interval); t.running = false; card.classList.add('alarm-active'); t.alarm = setInterval(() => {
-                            if (!audioCtx) audioCtx = new AudioContext();
-                            const osc = audioCtx.createOscillator();
-                            const gain = audioCtx.createGain();
-                            osc.connect(gain); gain.connect(audioCtx.destination);
-                            osc.start(); setTimeout(() => osc.stop(), 500);
-                        }, 1000);
+                    if (t.timeLeft > 0) {
+                        t.timeLeft--;
+                        updateTimerDisplay(id);
+                    } else {
+                        clearInterval(t.interval);
+                        t.running = false;
+                        card.classList.add('alarm-active');
+                        t.alarm = setInterval(playBeep, 1000);
                     }
                 }, 1000);
             }
-            render(); // Re-renderiza para atualizar estado dos botões de remover
+            render();
         }
 
         function resetIndividual(id, secs) {
             const t = timersData[id];
-            clearInterval(t.interval); clearInterval(t.alarm);
+            clearInterval(t.interval);
+            clearInterval(t.alarm);
             document.getElementById(id).classList.remove('alarm-active');
             t.running = false; t.timeLeft = secs;
             updateTimerDisplay(id);
@@ -279,6 +303,7 @@
             document.querySelector(`#${id} .timer-display`).innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
 
+        // --- LÓGICA DE JOGADORES ---
         function add() {
             const input = document.getElementById('nomeInput');
             if (input.value.trim()) {
@@ -293,71 +318,58 @@
         }
 
         function remove(index) {
-            // VERIFICAÇÃO DE SEGURANÇA
-            const algumTimerRodando = Object.values(timersData).some(t => t.running);
-            if (algumTimerRodando || startTimePartida) {
-                alert("Não é possível remover jogadores com a partida em andamento! Finalize a partida primeiro.");
-                return;
-            }
-
-            if (confirm("Remover este jogador?")) {
-                jogadores.splice(index, 1);
-                render(); saveToLocal();
-            }
+            const emAndamento = Object.values(timersData).some(t => t.running) || startTimePartida;
+            if (emAndamento) return alert("Partida em curso!");
+            if (confirm("Remover?")) { jogadores.splice(index, 1); render(); saveToLocal(); }
         }
 
         function render() {
             const lista = document.getElementById('lista');
             const calcAtual = document.getElementById('calculoAtual');
             const emAndamento = Object.values(timersData).some(t => t.running) || startTimePartida;
-
             lista.innerHTML = '';
             let total = 0;
             jogadores.forEach((j, i) => {
                 total += j.qtd;
-                lista.innerHTML += `<li><span><strong>${j.nome}</strong></span>
+                lista.innerHTML += `<li><span>${j.nome}</span>
                 <div class="controls">
                     <button class="btn-minus" onclick="change(${i}, -1)">-</button>
                     <span class="qty">${j.qtd}</span>
                     <button class="btn-plus" onclick="change(${i}, 1)">+</button>
-                    <button class="btn-remove" ${emAndamento ? 'disabled' : ''} onclick="remove(${i})">Remover</button>
+                    <button class="btn-remove" ${emAndamento ? 'disabled' : ''} onclick="remove(${i})">X</button>
                 </div></li>`;
             });
             document.getElementById('totalTxt').innerText = total;
             calcAtual.style.display = jogadores.length > 0 ? 'block' : 'none';
-            if (total > 0) calcular(total);
-        }
-
-        function calcular(total) {
-            let pos = [0]; let saldo = total;
-            let inicial = Math.min(4, saldo); pos[0] = inicial; saldo -= inicial;
-            while (saldo > 0) {
-                let u = pos.length - 1;
-                if (pos[u] >= (pos.length === 1 ? 0 : 3)) { pos.push(1); saldo--; if (saldo <= 0) break; }
-                for (let i = 0; i < pos.length; i++) {
-                    if (i === pos.length - 1 && pos[i] >= 3 && pos.length > 1) continue;
-                    if (saldo > 0) { pos[i]++; saldo--; }
+            if (total > 0) {
+                let pos = [0], saldo = total;
+                let inicial = Math.min(4, saldo); pos[0] = inicial; saldo -= inicial;
+                while (saldo > 0) {
+                    let u = pos.length - 1;
+                    if (pos[u] >= (pos.length === 1 ? 0 : 3)) { pos.push(1); saldo--; if (saldo <= 0) break; }
+                    for (let i = 0; i < pos.length; i++) {
+                        if (i === pos.length - 1 && pos[i] >= 3 && pos.length > 1) continue;
+                        if (saldo > 0) { pos[i]++; saldo--; }
+                    }
                 }
+                const d = document.getElementById('dist');
+                d.innerHTML = '';
+                pos.forEach((v, i) => d.innerHTML += `<div class="result-box"><span>${i + 1}º Lugar</span><strong>${v} fichas</strong></div>`);
             }
-            const d = document.getElementById('dist');
-            d.innerHTML = '';
-            pos.forEach((v, i) => d.innerHTML += `<div class="result-box"><span>${i + 1}º Lugar</span><strong>${v} fichas</strong></div>`);
-            return pos;
         }
 
         function finalizarPartida() {
             const total = jogadores.reduce((acc, curr) => acc + curr.qtd, 0);
-            if (total === 0) return alert("Adicione entradas!");
+            if (total === 0) return;
             const endTime = new Date();
             const durationMs = startTimePartida ? (endTime - startTimePartida) : 0;
             const diffHrs = Math.floor(durationMs / 3600000), diffMins = Math.floor((durationMs % 3600000) / 60000);
-            const duracaoTexto = diffHrs > 0 ? `${diffHrs}h ${diffMins}min` : `${diffMins} min`;
-
             historico.unshift({
-                inicio: startTimePartida ? startTimePartida.toLocaleTimeString() : '--:--',
-                fim: endTime.toLocaleTimeString(), duracao: duracaoTexto, total: total, resultado: calcular(total)
+                inicio: startTimePartida ? startTimePartida.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--',
+                fim: endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                duracao: diffHrs > 0 ? `${diffHrs}h ${diffMins}m` : `${diffMins} min`,
+                total: total
             });
-
             jogadores.forEach(j => j.qtd = 0);
             startTimePartida = null;
             Object.keys(timersData).forEach(id => resetIndividual(id, id === 't10' ? 600 : (id === 't7' ? 420 : 120)));
@@ -372,17 +384,13 @@
             historico.forEach((p, i) => {
                 listaH.innerHTML += `
                 <div class="history-card">
-                    <div style="display:flex; justify-content:space-between; font-weight:bold;">
-                        <span>Partida #${historico.length - i}</span>
-                        <span style="color:var(--green)">Total: ${p.total}</span>
-                    </div>
-                    <div style="color:var(--blue); font-size:0.9em">⏱ ${p.inicio} às ${p.fim} (${p.duracao})</div>
-                    <div style="font-size: 0.85em; color: #666;">${p.resultado.map((v, idx) => `${idx + 1}º: ${v}`).join(' | ')}</div>
+                    <b>Partida #${historico.length - i}</b> - Total: ${p.total}<br>
+                    <small>⏱ ${p.inicio} às ${p.fim} (${p.duracao})</small>
                 </div>`;
             });
         }
 
-        function limparHistorico() { if (confirm("Apagar histórico?")) { historico = []; saveToLocal(); renderHistorico(); } }
+        function limparHistorico() { if (confirm("Limpar?")) { historico = []; saveToLocal(); renderHistorico(); } }
     </script>
 </body>
 
