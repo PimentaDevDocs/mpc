@@ -740,6 +740,8 @@
 
         let levelEndTime = null;
 
+        let levelEndHandled = false;
+
         let tempoDecorrido = 0;
 
         let inicioPartida = null;
@@ -848,11 +850,19 @@
 
                 remainingSeconds = Math.max(0, l - tempoDecorrido);
 
+                if (remainingSeconds === 0) {
+
+                    remainingSeconds = l;
+
+                }
+
                 levelEndTime = Date.now() + remainingSeconds * 1000;
 
-
+                levelEndHandled = false;
 
                 levels.forEach(lvl => {
+
+                    document.getElementById(`card-${lvl}`).classList.remove('timer-blink');
 
                     if (lvl !== activeLevel) {
 
@@ -954,11 +964,15 @@
 
                     remainingSeconds = Math.max(0, Math.ceil((levelEndTime - now) / 1000));
 
+                    if (remainingSeconds > 0) levelEndHandled = false;
+
                     document.getElementById(`disp-${activeLevel}`).innerText = formatTime(remainingSeconds);
 
 
 
-                    if (remainingSeconds <= 0) {
+                    if (remainingSeconds <= 0 && !levelEndHandled) {
+
+                        levelEndHandled = true;
 
                         const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS57OihUhENUKXh8bllHAU2jdXvzHksBS2Azezmjz0HFV6x5/CtYBcJPZPY7sl6KwUqfs7y2Ik2CBdlu+7mnlENC1Cn5PC5ZhwGOI7V7sx5KwUte83s5o89BxRes+n0q10XCT2T1+zKdysFK3/N8tiJNggWZLvu6J9SDA1Qp+Lwu2YbBzaO1erNdysGK3zP79iLNAoUXrTp86VYFAhAnOH2w20jBzKH0O69gyoKG2m+6+yhVRMNQZvh8L90HQU7ldfu1YU2CiJtvPDorVoZDUeZ4ey9dh0GNYnO7NqOOwkfYrjp7KVbGg1HmOH0xnYlBzaM0OvWizUKHGO36+yjVhQMRZvi7L5yIQU4k9bp1Ig0Ch5kvOvrrVsVDkaX4/C4ZBwHNo/U7c2EPAkcX7Xn7KdXEw5Hm+HzvXIgBzWR1e3XjDQLHGS76uqkVBMOQ53g8L1zIAc1j9Tp1Ik0ChxmvevtrVgUDUiY4e+3ZRwGOI7W7M2AOwscZ77q7KhZFA5ImODwt2IaBjaO1OrVhjgKHWW96+qoVhUMR5nl8bdlGwY2j9Xt1Ik0Ch1luuvqqFgUDUmX4PG2Yxv');
 
