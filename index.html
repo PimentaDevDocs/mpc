@@ -1,358 +1,2146 @@
 <!DOCTYPE html>
+
 <html lang="pt-pt">
+
+
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Minhoca Poker - Sistema Financeiro</title>
+
     <style>
         :root {
-            --red: #dc3545; --green: #28a745; --blue: #007bff;
-            --orange: #fd7e14; --dark: #343a40; --gray: #6c757d; --purple: #6f42c1;
+
+            --red: #dc3545;
+
+            --green: #28a745;
+
+            --blue: #007bff;
+
+            --orange: #fd7e14;
+
+            --dark: #343a40;
+
+            --gray: #6c757d;
+
+            --purple: #6f42c1;
+
         }
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; max-width: 850px; margin: 10px auto; background: #f0f2f5; padding: 10px; }
-        .container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        .timers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; }
-        .timer-card { background: #dee2e6; color: #343a40; padding: 15px; border-radius: 10px; text-align: center; opacity: 0.6; }
-        .timer-card.active { background: var(--dark); color: white; border: 3px solid var(--green); opacity: 1; transform: scale(1.05); }
-        .timer-display { font-size: 1.8rem; font-family: monospace; font-weight: bold; }
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); z-index: 9999; padding: 20px; overflow-y: auto; display: flex; align-items: center; justify-content: center; }
-        .modal-overlay.hidden { display: none !important; }
-        .modal { background: white; padding: 25px; border-radius: 15px; max-width: 550px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative; }
-        .modal h3 { margin-top: 0; margin-bottom: 10px; color: var(--dark); }
-        .modal-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .modal-buttons button { width: 100%; padding: 14px; font-size: 15px; }
-        .pay-row { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 2px solid #e0e0e0; }
-        .pay-input-group { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
-        .pay-input-group select, .pay-input-group input { padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
-        .pay-input-group select { flex: 1; min-width: 0; }
-        .pay-input-group input { width: 70px; text-align: center; font-weight: bold; }
-        .pay-input-group button { padding: 8px 12px; font-size: 13px; font-weight: bold; color: white; border-radius: 6px; min-width: 80px; }
-        .btn-pay { background: var(--blue); }
-        .btn-remove { background: var(--red); }
-        ul { list-style: none; padding: 0; margin: 0; }
-        li { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #fff; margin-bottom: 8px; border-radius: 8px; border: 1px solid #ddd; }
-        li.out { background: #f8f9fa; opacity: 0.6; border-left: 4px solid var(--red); }
-        button { border: none; border-radius: 6px; cursor: pointer; font-weight: bold; padding: 10px; transition: all 0.2s; }
-        .btn-action { color: white; min-width: 100px; }
-        .pos-badge { background: var(--purple); color: white; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-right: 8px; }
-        .freeroll-badge { background: #fff3cd; color: #856404; padding: 4px 10px; border-radius: 6px; font-weight: 800; border: 1px solid #ffeeba; font-size: 0.75em; letter-spacing: 0.5px; }
-        .history-card { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 5px solid var(--blue); cursor: pointer; }
-        .debt-log { color: var(--red); font-weight: bold; }
-        .credit-log { color: var(--orange); font-weight: bold; }
-        .view-row { font-size: 0.9em; padding: 5px 0; border-bottom: 1px solid #eee; }
-        .total-banner { background: var(--dark); color: white; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem; border-bottom: 4px solid var(--green); }
+
+
+
+        * {
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        body {
+
+            font-family: 'Segoe UI', sans-serif;
+
+            max-width: 850px;
+
+            margin: 10px auto;
+
+            background: #f0f2f5;
+
+            padding: 10px;
+
+        }
+
+
+
+        .container {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+            margin-bottom: 15px;
+
+        }
+
+
+
+        .timers-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+
+        .timer-card {
+
+            background: #dee2e6;
+
+            color: #343a40;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            opacity: 0.6;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+
+        .timer-card.active {
+
+            background: var(--dark);
+
+            color: white;
+
+            border: 3px solid var(--green);
+
+            opacity: 1;
+
+            transform: scale(1.05);
+
+        }
+
+
+
+        .timer-display {
+
+            font-size: 1.8rem;
+
+            font-family: monospace;
+
+            font-weight: bold;
+
+        }
+
+
+
+        .modal-overlay {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            bottom: 0;
+
+            width: 100vw;
+
+            height: 100vh;
+
+            background: rgba(0, 0, 0, 0.85);
+
+            z-index: 9999;
+
+            padding: 10px;
+
+            overflow-y: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+
+        .modal-overlay.hidden {
+
+            display: none !important;
+
+        }
+
+
+
+        .modal {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            max-width: 700px;
+
+            width: 100%;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+
+            position: relative;
+
+        }
+
+
+
+        .modal-buttons {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+
+            margin-top: 20px;
+
+        }
+
+
+
+        .pay-row {
+
+            background: #f8f9fa;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 8px;
+
+            border: 1px solid #e0e0e0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            flex-wrap: nowrap;
+
+        }
+
+
+
+        .pay-info {
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-width: 120px;
+
+        }
+
+
+
+        .pay-input-group {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            flex: 2;
+
+        }
+
+
+
+        .pay-input-group select,
+
+        .pay-input-group input {
+
+            padding: 8px;
+
+            border-radius: 6px;
+
+            border: 1px solid #ccc;
+
+            font-size: 13px;
+
+        }
+
+
+
+        .pay-input-group select {
+
+            flex: 1;
+
+        }
+
+
+
+        .pay-input-group input {
+
+            width: 60px;
+
+            text-align: center;
+
+            font-weight: bold;
+
+        }
+
+
+
+        .btn-pay {
+            background: var(--blue);
+            color: white;
+            padding: 8px 12px;
+        }
+
+        .btn-remove {
+            background: var(--red);
+            color: white;
+            padding: 8px 12px;
+        }
+
+
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 12px;
+
+            background: #fff;
+
+            margin-bottom: 8px;
+
+            border-radius: 8px;
+
+            border: 1px solid #ddd;
+
+            transition: all 0.2s;
+
+        }
+
+
+
+        li.out {
+            background: #f8f9fa;
+            opacity: 0.6;
+            border-left: 4px solid var(--red);
+        }
+
+
+
+        li.selected-for-elimination {
+
+            background: #fff3cd;
+
+            border: 2px solid var(--orange);
+
+            transform: scale(1.02);
+
+        }
+
+
+
+        button {
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+
+
+        .pos-badge {
+
+            background: var(--purple);
+
+            color: white;
+
+            padding: 3px 8px;
+
+            border-radius: 4px;
+
+            font-weight: bold;
+
+            margin-right: 8px;
+
+        }
+
+
+
+        .empate-badge {
+
+            background: var(--orange);
+
+            color: white;
+
+            padding: 3px 8px;
+
+            border-radius: 4px;
+
+            font-weight: bold;
+
+            margin-left: 5px;
+
+            font-size: 0.75em;
+
+        }
+
+
+
+        .freeroll-badge {
+
+            background: #d4edda;
+
+            color: #155724;
+
+            padding: 4px 8px;
+
+            border-radius: 6px;
+
+            font-weight: 800;
+
+            border: 1px solid #c3e6cb;
+
+            font-size: 0.7em;
+
+            margin-left: 5px;
+
+        }
+
+
+
+        .history-card {
+
+            background: #fff;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 8px;
+
+            border-left: 5px solid var(--blue);
+
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+            cursor: pointer;
+
+            transition: all 0.2s;
+
+        }
+
+
+
+        .history-card:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+        }
+
+
+
+        .total-banner {
+
+            background: var(--dark);
+
+            color: white;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            text-align: center;
+
+            margin-bottom: 15px;
+
+            font-weight: bold;
+
+            border-bottom: 4px solid var(--green);
+
+        }
+
+
+
+        .elimination-panel {
+
+            background: #fff3cd;
+
+            border: 2px solid var(--orange);
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 15px;
+
+            display: none;
+
+        }
+
+
+
+        .elimination-panel.active {
+
+            display: block;
+
+        }
+
+
+
+        .checkbox-player {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 8px;
+
+            background: white;
+
+            border-radius: 6px;
+
+            margin-bottom: 6px;
+
+            border: 1px solid #ddd;
+
+        }
+
+
+
+        .checkbox-player input[type="checkbox"] {
+
+            width: 20px;
+
+            height: 20px;
+
+            cursor: pointer;
+
+        }
+
+
+
+        .checkbox-player label {
+
+            cursor: pointer;
+
+            flex: 1;
+
+            font-weight: 500;
+
+        }
     </style>
+
 </head>
+
+
+
 <body>
+
     <div id="pokerModal" class="modal-overlay hidden">
-        <div class="modal"><h3 id="modalTitle"></h3><div id="modalContent"></div><div class="modal-buttons" id="modalButtons"></div></div>
+
+        <div class="modal">
+
+            <h3 id="modalTitle" style="margin-top:0"></h3>
+
+            <div id="modalContent"></div>
+
+            <div class="modal-buttons" id="modalButtons"></div>
+
+        </div>
+
     </div>
+
+
+
     <div class="timers-grid">
-        <div class="timer-card" id="card-600"><div class="timer-display" id="disp-600">10:00</div><button onclick="selectLevel(600)" style="width:100%; font-size:0.7em">NÍVEL 1</button></div>
-        <div class="timer-card" id="card-420"><div class="timer-display" id="disp-420">07:00</div><button onclick="selectLevel(420)" style="width:100%; font-size:0.7em">NÍVEL 2</button></div>
-        <div class="timer-card" id="card-300"><div class="timer-display" id="disp-300">05:00</div><button onclick="selectLevel(300)" style="width:100%; font-size:0.7em">NÍVEL 3</button></div>
-        <div class="timer-card" id="card-120"><div class="timer-display" id="disp-120">02:00</div><button onclick="selectLevel(120)" style="width:100%; font-size:0.7em">NÍVEL 4</button></div>
+
+        <div class="timer-card" id="card-600" onclick="selectLevel(600)">
+
+            <div class="timer-display" id="disp-600">10:00</div>
+
+            <div>NÍVEL 1</div>
+
+        </div>
+
+        <div class="timer-card" id="card-420" onclick="selectLevel(420)">
+
+            <div class="timer-display" id="disp-420">07:00</div>
+
+            <div>NÍVEL 2</div>
+
+        </div>
+
+        <div class="timer-card" id="card-300" onclick="selectLevel(300)">
+
+            <div class="timer-display" id="disp-300">05:00</div>
+
+            <div>NÍVEL 3</div>
+
+        </div>
+
+        <div class="timer-card" id="card-120" onclick="selectLevel(120)">
+
+            <div class="timer-display" id="disp-120">02:00</div>
+
+            <div>NÍVEL 4</div>
+
+        </div>
+
     </div>
+
+
+
     <div class="container">
-        <button id="masterPause" onclick="toggleMasterPause()" style="width:100%; background:var(--green); color:white; margin-bottom:15px; padding:18px; font-size:1.2rem">INICIAR PARTIDA</button>
-        <div style="display: flex; gap: 8px; margin-bottom: 15px;"><input type="text" id="nomeInput" placeholder="Nome do Jogador..." style="flex:1; padding:12px; border-radius:8px; border:1px solid #ddd"><button onclick="add()" style="background:var(--blue); color:white; width:80px">Add</button></div>
+
+        <button id="masterPause" onclick="toggleMasterPause()"
+            style="width:100%; background:var(--green); color:white; margin-bottom:15px; padding:18px; font-size:1.2rem">INICIAR
+
+            PARTIDA</button>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+
+            <input type="text" id="nomeInput" placeholder="Nome do Jogador..."
+                style="flex:1; padding:12px; border-radius:8px; border:1px solid #ddd">
+
+            <button onclick="add()" style="background:var(--blue); color:white; width:80px">Add</button>
+
+        </div>
+
         <div class="total-banner" id="totalDisplay">TOTAL DE ENTRADAS: 0</div>
+
+
+
+        <!-- Painel de Eliminação Múltipla -->
+
+        <div class="elimination-panel" id="eliminationPanel">
+
+            <h4 style="margin:0 0 10px 0; color:var(--orange)">⚠️ Modo Eliminação Múltipla</h4>
+
+            <div id="eliminationCheckboxes"></div>
+
+            <div style="display:flex; gap:8px; margin-top:10px">
+
+                <button onclick="confirmMultipleElimination()"
+                    style="flex:1; background:var(--red); color:white; padding:12px">
+
+                    Confirmar Eliminação
+
+                </button>
+
+                <button onclick="cancelMultipleElimination()"
+                    style="flex:1; background:var(--gray); color:white; padding:12px">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
         <ul id="lista"></ul>
+
+        <button id="btnEliminarMultiplos" onclick="abrirEliminacaoMultipla()"
+            style="width:100%; background:var(--orange); color:white; padding:12px; border-radius:8px; margin-top:10px; display:none">
+
+            🎯 ELIMINAR MÚLTIPLOS JOGADORES
+
+        </button>
+
+        <button id="btnFinalizar" onclick="checarFinalizacao()"
+            style="width:100%; background:var(--orange); color:white; padding:15px; border-radius:8px; margin-top:15px; display:none; font-weight:bold">ENCERRAR
+
+            E CALCULAR</button>
+
     </div>
-    <div class="container" id="historicoSection" style="display:none"><h3>Histórico de Partidas</h3><div id="historicoLista"></div></div>
+
+
+
+    <div class="container" id="historicoSection" style="display:none">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+
+            <h3 style="margin:0">Histórico de Partidas</h3>
+
+            <button onclick="limparHistorico()" style="background:none; color:var(--red); font-size:0.8em">Limpar
+                Tudo</button>
+
+        </div>
+
+        <div id="historicoLista"></div>
+
+    </div>
+
+
 
     <script>
+
         let jogadores = JSON.parse(localStorage.getItem('poker_jogadores')) || [];
+
         let historico = JSON.parse(localStorage.getItem('poker_historico')) || [];
-        let elimOrder = [], isRunning = false, gameStarted = false, activeLevel = 600, masterInterval = null, distTemp = {};
+
+        let isRunning = false, activeLevel = 600, masterInterval = null;
+
+        let remainingSeconds = 600;
+
+        let tempoDecorrido = 0;
+
+        let inicioPartida = null;
+
+        let wakeLock = null;
+
+        let partidaIniciada = false;
+
+        let selectedForElimination = [];
+
         const levels = [600, 420, 300, 120];
 
-        // Cronômetro e Tempos Reais
-        let elapsedSeconds = 0;
-        let lastTime = null;
-        let startTimeReal = null; // Quando o botão "Iniciar" foi clicado pela 1ª vez
 
-        function save() { localStorage.setItem('poker_jogadores', JSON.stringify(jogadores)); localStorage.setItem('poker_historico', JSON.stringify(historico)); }
-        function add() { const val = document.getElementById('nomeInput').value.trim(); if (val) { jogadores.push({ nome: val, qtd: 0, eliminado: false, posicao: null }); document.getElementById('nomeInput').value = ''; render(); save(); } }
-        function openModal(title, contentHTML, buttons) { const modal = document.getElementById('pokerModal'); document.getElementById('modalTitle').innerText = title; document.getElementById('modalContent').innerHTML = contentHTML; const btnArea = document.getElementById('modalButtons'); btnArea.innerHTML = ''; buttons.forEach(btn => { const b = document.createElement('button'); b.innerText = btn.text; b.style.background = btn.color || 'var(--gray)'; b.style.color = 'white'; b.onclick = () => { if(btn.action) btn.action(); if(!btn.keepOpen) closeModal(); }; btnArea.appendChild(b); }); modal.classList.remove('hidden'); }
-        function closeModal() { document.getElementById('pokerModal').classList.add('hidden'); }
+
+        async function requestWakeLock() {
+
+            try {
+
+                if ('wakeLock' in navigator) {
+
+                    wakeLock = await navigator.wakeLock.request('screen');
+
+                    console.log('Wake Lock ativado');
+
+
+
+                    wakeLock.addEventListener('release', () => {
+
+                        console.log('Wake Lock liberado');
+
+                    });
+
+                }
+
+            } catch (err) {
+
+                console.error('Erro ao ativar Wake Lock:', err);
+
+            }
+
+        }
+
+
+
+        async function releaseWakeLock() {
+
+            if (wakeLock !== null) {
+
+                try {
+
+                    await wakeLock.release();
+
+                    wakeLock = null;
+
+                    console.log('Wake Lock desativado');
+
+                } catch (err) {
+
+                    console.error('Erro ao desativar Wake Lock:', err);
+
+                }
+
+            }
+
+        }
+
+
+
+        document.addEventListener('visibilitychange', async () => {
+
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+
+                await requestWakeLock();
+
+            }
+
+        });
+
+
+
+        function save() {
+
+            localStorage.setItem('poker_jogadores', JSON.stringify(jogadores));
+
+            localStorage.setItem('poker_historico', JSON.stringify(historico));
+
+        }
+
+
+
+        function formatTime(s) { return `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`; }
+
+
+
+        function selectLevel(l) {
+
+            if (isRunning) {
+
+                const tempoGastoNesteNivel = activeLevel - remainingSeconds;
+
+                tempoDecorrido += tempoGastoNesteNivel;
+
+
+
+                activeLevel = l;
+
+                remainingSeconds = Math.max(0, l - tempoDecorrido);
+
+
+
+                levels.forEach(lvl => {
+
+                    if (lvl !== activeLevel) {
+
+                        document.getElementById(`disp-${lvl}`).innerText = formatTime(lvl);
+
+                    }
+
+                    document.getElementById(`card-${lvl}`).classList.toggle('active', lvl === l);
+
+                });
+
+
+
+                document.getElementById(`disp-${activeLevel}`).innerText = formatTime(remainingSeconds);
+
+            } else {
+
+                clearInterval(masterInterval);
+
+                activeLevel = l;
+
+                remainingSeconds = l;
+
+                tempoDecorrido = 0;
+
+                levels.forEach(lvl => {
+
+                    document.getElementById(`disp-${lvl}`).innerText = formatTime(lvl);
+
+                    document.getElementById(`card-${lvl}`).classList.toggle('active', lvl === l);
+
+                });
+
+            }
+
+        }
+
+
+
+        function toggleMasterPause() {
+
+            if (isRunning) {
+
+                clearInterval(masterInterval);
+
+                releaseWakeLock();
+
+                document.getElementById('masterPause').innerText = "CONTINUAR";
+
+                document.getElementById('masterPause').style.background = "var(--green)";
+
+                isRunning = false;
+
+            } else {
+
+                if (inicioPartida === null) {
+
+                    inicioPartida = new Date();
+
+                    partidaIniciada = true;
+
+
+
+                    // Ressuscita todos os jogadores ao iniciar a partida
+
+                    jogadores.forEach(j => {
+
+                        j.eliminado = false;
+
+                        j.posicao = null;
+
+                        j.emEmpate = false;
+
+                    });
+
+                }
+
+
+
+                requestWakeLock();
+
+                document.getElementById('masterPause').innerText = "PAUSAR";
+
+                document.getElementById('masterPause').style.background = "var(--red)";
+
+                isRunning = true;
+
+
+
+                render();
+
+
+
+                masterInterval = setInterval(() => {
+
+                    if (remainingSeconds > 0) {
+
+                        remainingSeconds--;
+
+                        document.getElementById(`disp-${activeLevel}`).innerText = formatTime(remainingSeconds);
+
+                    } else {
+
+                        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS57OihUhENUKXh8bllHAU2jdXvzHksBS2Azezmjz0HFV6x5/CtYBcJPZPY7sl6KwUqfs7y2Ik2CBdlu+7mnlENC1Cn5PC5ZhwGOI7V7sx5KwUte83s5o89BxRes+n0q10XCT2T1+zKdysFK3/N8tiJNggWZLvu6J9SDA1Qp+Lwu2YbBzaO1erNdysGK3zP79iLNAoUXrTp86VYFAhAnOH2w20jBzKH0O69gyoKG2m+6+yhVRMNQZvh8L90HQU7ldfu1YU2CiJtvPDorVoZDUeZ4ey9dh0GNYnO7NqOOwkfYrjp7KVbGg1HmOH0xnYlBzaM0OvWizUKHGO36+yjVhQMRZvi7L5yIQU4k9bp1Ig0Ch5kvOvrrVsVDkaX4/C4ZBwHNo/U7c2EPAkcX7Xn7KdXEw5Hm+HzvXIgBzWR1e3XjDQLHGS76uqkVBMOQ53g8L1zIAc1j9Tp1Ik0ChxmvevtrVgUDUiY4e+3ZRwGOI7W7M2AOwscZ77q7KhZFA5ImODwt2IaBjaO1OrVhjgKHWW96+qoVhUMR5nl8bdlGwY2j9Xt1Ik0Ch1luuvqqFgUDUmX4PG2Yxv');
+
+                        audio.play().catch(e => console.log('Erro ao tocar alarme:', e));
+
+
+
+                        alert(`⏰ NÍVEL ${levels.indexOf(activeLevel) + 1} CONCLUÍDO!`);
+
+
+
+                        const currentIndex = levels.indexOf(activeLevel);
+
+                        let nextLevel;
+
+
+
+                        if (currentIndex === levels.length - 1) {
+
+                            nextLevel = levels[1];
+
+                        } else {
+
+                            nextLevel = levels[currentIndex + 1];
+
+                        }
+
+
+
+                        tempoDecorrido += activeLevel;
+
+                        activeLevel = nextLevel;
+
+                        remainingSeconds = nextLevel;
+
+
+
+                        levels.forEach(lvl => {
+
+                            document.getElementById(`disp-${lvl}`).innerText = formatTime(lvl);
+
+                            document.getElementById(`card-${lvl}`).classList.toggle('active', lvl === activeLevel);
+
+                        });
+
+
+
+                        document.getElementById(`disp-${activeLevel}`).innerText = formatTime(remainingSeconds);
+
+                    }
+
+                }, 1000);
+
+            }
+
+        }
+
+        function add() {
+
+            const val = document.getElementById('nomeInput').value.trim();
+
+            if (val) {
+
+                jogadores.push({ nome: val, qtd: 0, eliminado: false, posicao: null });
+
+                document.getElementById('nomeInput').value = '';
+
+                render(); save();
+
+            }
+
+        }
+
+
+
+        function render() {
+
+            const lista = document.getElementById('lista');
+
+            lista.innerHTML = '';
+
+            let total = 0;
+
+
+
+            // Mapeamento "dense ranking" (sem buracos), mas respeitando a lógica do torneio:
+            // - Posição real: 6=pior ... 1=melhor
+            // - Enquanto ainda há vivos, as posições 1..vivos existem "implicitamente"
+            // Isso faz:
+            // - Com 6 jogadores e 1 eliminado (pos=6, vivos=5) → exibe 6
+            // - Se houver empate e surgir buraco (ex: 6,5,4,4,2,1 com vivos=0) → exibe 5,4,3,3,2,1
+            const vivos = jogadores.filter(j => !j.eliminado).length;
+            const posicoesImplicitasVivos = Array.from({ length: vivos }, (_, idx) => idx + 1);
+            const posicoesEliminados = jogadores.filter(j => j.posicao).map(j => j.posicao);
+
+            const posicoesParaRanking = [...new Set([...posicoesImplicitasVivos, ...posicoesEliminados])].sort((a, b) => a - b);
+            const mapeamentoPosicoes = {};
+            posicoesParaRanking.forEach((posReal, idx) => {
+                mapeamentoPosicoes[posReal] = idx + 1;
+            });
+
+
+
+            jogadores.forEach((j, i) => {
+
+                total += j.qtd;
+
+
+
+                // Usa a flag emEmpate para determinar se deve mostrar badge
+
+                const jogadoresMesmaPosicao = jogadores.filter(x => x.posicao === j.posicao && j.posicao !== null);
+
+                const temEmpate = j.emEmpate && jogadoresMesmaPosicao.length > 1;
+
+
+
+                // Usa a posição RENUMERADA para exibição
+
+                const posicaoExibida = j.posicao ? mapeamentoPosicoes[j.posicao] : null;
+
+
+
+                lista.innerHTML += `<li class="${j.eliminado ? 'out' : ''}">
+
+                    <div>
+
+                        ${posicaoExibida ? `<span class="pos-badge">${posicaoExibida}o</span>` : ''} 
+
+                        <strong>${j.nome}</strong>
+
+                        ${temEmpate ? `<span class="empate-badge">EMPATE ${jogadoresMesmaPosicao.length}x</span>` : ''}
+
+                    </div>
+
+                    <div style="display:flex; gap:5px; align-items:center">
+
+                        <button onclick="change(${i},-1)" style="background:#eee; padding:5px 10px">-</button>
+
+                        <b style="min-width:20px; text-align:center">${j.qtd}</b>
+
+                        <button onclick="change(${i},1)" style="background:#eee; padding:5px 10px">+</button>
+
+                        <button style="background:${j.eliminado ? 'var(--gray)' : 'var(--red)'}; color:white; padding:5px 10px; margin-left:5px; ${!partidaIniciada ? 'opacity:0.5; cursor:not-allowed' : ''}" onclick="toggleEliminar(${i})" ${!partidaIniciada ? 'disabled' : ''}>${j.eliminado ? 'Voltar' : 'Eliminar'}</button>
+
+                        <button onclick="remove(${i})" ${partidaIniciada ? 'disabled' : ''} style="color:var(--red); background:none; font-size:1.5rem; margin-left:5px; ${partidaIniciada ? 'opacity:0.3; cursor:not-allowed' : ''}">&times;</button>
+
+                    </div>
+
+                </li>`;
+
+            });
+
+            const dist = calcularDistribuicao(total);
+
+            const ultimaPosicao = dist.length;
+
+            const textoPremiacao = total > 0 ? ` - Prêmio até ${ultimaPosicao}o lugar` : '';
+
+
+
+            document.getElementById('totalDisplay').innerText = `TOTAL DE ENTRADAS: ${total}${textoPremiacao}`;
+
+
+            const todosEliminados = jogadores.length > 0 && vivos === 0;
+
+            // Mostra botão de eliminação múltipla só durante a partida e se houver 2+ jogadores vivos
+            document.getElementById('btnEliminarMultiplos').style.display = (partidaIniciada && vivos >= 2) ? 'block' : 'none';
+
+            document.getElementById('btnFinalizar').style.display = todosEliminados ? 'block' : 'none';
+
+        }
+
+
+
+        function change(i, d) { jogadores[i].qtd = Math.max(0, jogadores[i].qtd + d); render(); save(); }
+
+
+
+        function remove(i) {
+
+            if (partidaIniciada) {
+
+                alert("Não é possível remover jogadores após iniciar a partida!");
+
+                return;
+
+            }
+
+            if (confirm("Remover?")) {
+
+                jogadores.splice(i, 1);
+
+                render();
+
+                save();
+
+            }
+
+        }
+
+
+
+        function toggleEliminar(i) {
+            if (!partidaIniciada) return;
+            if (!jogadores[i].eliminado) {
+
+                // Eliminando jogador individual - calcula a próxima posição disponível
+
+                const proximaPosicao = calcularProximaPosicaoDisponivel();
+                jogadores[i].posicao = proximaPosicao;
+
+                jogadores[i].eliminado = true;
+
+                jogadores[i].emEmpate = false; // Eliminação individual, sem empate
+
+            } else {
+
+                // Reativando jogador
+
+                const posicaoAnterior = jogadores[i].posicao;
+                const eraEmpate = jogadores[i].emEmpate;
+                jogadores[i].eliminado = false;
+
+                jogadores[i].posicao = null;
+
+                jogadores[i].emEmpate = false;
+
+
+
+                // Ajusta posições dos jogadores que foram eliminados DEPOIS deste
+
+                // Se era empate, precisa tratar diferente
+
+                if (eraEmpate) {
+
+                    const outrosEmpatados = jogadores.filter(j =>
+
+                        j.eliminado && j.posicao === posicaoAnterior && j !== jogadores[i]
+
+                    );
+
+
+
+                    // Se ainda há outros empatados na mesma posição
+
+                    if (outrosEmpatados.length === 1) {
+
+                        // Era empate de 2, agora só sobrou 1, remove flag de empate
+
+                        outrosEmpatados[0].emEmpate = false;
+
+                    }
+
+                }
+
+
+
+                // Ajusta posições: quem estava em posição MENOR (melhor) volta uma posição para PIOR
+
+                jogadores.forEach(j => {
+
+                    if (j.eliminado && j.posicao < posicaoAnterior) {
+
+                        j.posicao++;
+
+                    }
+
+                });
+
+            }
+
+            render();
+
+            save();
+
+        }
+
+
+
+        // NOVA FUNÇÃO: Calcula qual é a próxima posição disponível (sempre sequencial, sem pular)
+
+        function calcularProximaPosicaoDisponivel() {
+
+            const jogadoresVivos = jogadores.filter(j => !j.eliminado);
+
+
+
+            // A posição do próximo eliminado é igual ao número de jogadores ainda vivos
+
+            // Exemplo: 6 vivos → próximo eliminado vai para 6o lugar
+
+            //          2 vivos → próximo eliminado vai para 2o lugar
+
+            //          1 vivo → próximo eliminado vai para 1o lugar (campeão)
+
+            return jogadoresVivos.length;
+
+        }
+
+
+
+        // Abre painel de eliminação múltipla
+        function abrirEliminacaoMultipla() {
+            selectedForElimination = [];
+            const panel = document.getElementById('eliminationPanel');
+            const checkboxContainer = document.getElementById('eliminationCheckboxes');
+            checkboxContainer.innerHTML = '';
+
+
+
+            jogadores.forEach((j, i) => {
+
+                if (!j.eliminado) {
+
+                    checkboxContainer.innerHTML += `
+
+                        <div class="checkbox-player">
+
+                            <input type="checkbox" id="check-${i}" onchange="toggleSelection(${i})">
+
+                            <label for="check-${i}">${j.nome} (${j.qtd} fichas)</label>
+
+                        </div>
+
+                    `;
+
+                }
+
+            });
+
+
+
+            panel.classList.add('active');
+            document.getElementById('lista').style.display = 'none';
+            document.getElementById('btnEliminarMultiplos').style.display = 'none';
+            document.getElementById('btnFinalizar').style.display = 'none';
+        }
+
+        function toggleSelection(index) {
+            const checkbox = document.getElementById(`check-${index}`);
+            if (checkbox.checked) {
+                if (!selectedForElimination.includes(index)) selectedForElimination.push(index);
+            } else {
+                selectedForElimination = selectedForElimination.filter(i => i !== index);
+            }
+        }
+
+        function confirmMultipleElimination() {
+            if (selectedForElimination.length === 0) {
+                alert("Selecione pelo menos um jogador para eliminar!");
+                return;
+            }
+            const vivosAgora = jogadores.filter(j => !j.eliminado).length;
+            const proximaPosicao = vivosAgora;
+
+            // Posição exibida (dense ranking, sem buracos), incluindo posições implícitas dos vivos
+            // Ex.: 6 jogadores, elimina 2 com 4 vivos (pos real=4, vivos depois=2) → exibe 3ª posição
+            const vivosDepois = vivosAgora - selectedForElimination.length;
+            const posicoesImplicitasVivos = Array.from({ length: vivosDepois }, (_, idx) => idx + 1);
+            const posicoesExistentes = jogadores.filter(j => j.posicao).map(j => j.posicao);
+            const todasApos = [...new Set([...posicoesImplicitasVivos, ...posicoesExistentes, proximaPosicao])].sort((a, b) => a - b);
+            const posicaoExibidaMsg = todasApos.indexOf(proximaPosicao) + 1;
+
+            const nomes = selectedForElimination.map(i => jogadores[i].nome).join(', ');
+
+            const mensagem = selectedForElimination.length > 1
+
+                ? `Confirmar eliminação de ${selectedForElimination.length} jogadores em EMPATE na ${posicaoExibidaMsg}ª posição?\n\n${nomes}`
+
+                : `Confirmar eliminação de ${nomes} na ${posicaoExibidaMsg}ª posição?`;
+
+
+
+            if (confirm(mensagem)) {
+                const quantidadeEmpatados = selectedForElimination.length;
+                selectedForElimination.forEach(i => {
+                    jogadores[i].eliminado = true;
+                    jogadores[i].posicao = proximaPosicao;
+                    jogadores[i].emEmpate = quantidadeEmpatados > 1;
+                });
+                cancelMultipleElimination();
+                document.getElementById('lista').style.display = 'block';
+                render();
+                save();
+            }
+        }
+
+        function cancelMultipleElimination() {
+            selectedForElimination = [];
+            document.getElementById('eliminationPanel').classList.remove('active');
+            document.getElementById('lista').style.display = 'block';
+            render();
+        }
+
+
+
+        function calcularDistribuicao(total, numJogadores = null) {
+
+            if (total === 0) return [];
+
+
+
+            const maxPosicoes = numJogadores || 999;
+
+
+
+            let pos = [0];
+
+            let saldo = total;
+
+            let i = 0;
+
+
+
+            while (saldo > 0) {
+
+                pos[i]++;
+
+                saldo--;
+
+
+
+                if (pos.length < maxPosicoes && saldo > 0) {
+
+                    if (i === pos.length - 1 && pos[i] === 3 && pos.length > 1) {
+
+                        pos.push(0);
+
+                    }
+
+                    else if (pos.length === 1 && pos[0] === 4) {
+
+                        pos.push(0);
+
+                    }
+
+                }
+
+
+
+                i++;
+
+                if (i >= pos.length) {
+
+                    i = 0;
+
+                }
+
+            }
+
+
+
+            return pos;
+
+        }
+
+
 
         function getPremiacao(pos, total) {
+
             if (!pos) return 0;
-            if (pos === 1) return Math.floor(total * 0.6);
-            if (pos === 2) return Math.floor(total * 0.3);
-            if (pos === 3) return total - (Math.floor(total * 0.6) + Math.floor(total * 0.3));
-            return 0;
+
+            const dist = calcularDistribuicao(total, jogadores.length);
+
+            if (pos > dist.length) return 0;
+
+            return dist[pos - 1];
+
         }
+
+
+
+        function getPremiacaoCompartilhada(jogador, total) {
+
+            if (!jogador.posicao) return 0;
+
+
+
+            // Pega todas as posições distintas ordenadas
+
+            const todasPosicoes = [...new Set(jogadores.filter(j => j.posicao).map(j => j.posicao))].sort((a, b) => a - b);
+
+            const numPosicoesDistintas = todasPosicoes.length;
+
+
+
+            // Encontra o ÍNDICE da posição do jogador na lista ordenada
+
+            const indicePosicao = todasPosicoes.indexOf(jogador.posicao);
+
+
+
+            // Calcula distribuição
+
+            const dist = calcularDistribuicao(total, numPosicoesDistintas);
+
+
+
+            // Verifica se o jogador está em empate através da flag
+
+            if (!jogador.emEmpate) {
+
+                // Sem empate, retorna o prêmio normal usando o índice correto
+
+                return dist[indicePosicao] || 0;
+
+            } else {
+
+                // Com empate: conta quantos jogadores estão empatados na mesma posição
+
+                const jogadoresMesmaPosicao = jogadores.filter(j => j.posicao === jogador.posicao && j.emEmpate);
+
+                const qtdCompartilhando = jogadoresMesmaPosicao.length;
+
+
+
+                // Pega o prêmio da posição usando o índice correto
+
+                const premiacaoPosicao = dist[indicePosicao] || 0;
+
+
+
+                // Divide o prêmio da posição pela quantidade de jogadores empatados
+
+                return premiacaoPosicao / qtdCompartilhando;
+
+            }
+
+        }
+
+
+
+        function checarFinalizacao() {
+
+            const vivo = jogadores.find(j => !j.eliminado);
+
+            if (vivo) {
+
+                vivo.posicao = 1;
+
+                vivo.eliminado = true;
+
+                vivo.emEmpate = false; // Campeão nunca está em empate
+
+            }
+
+            render();
+
+            abrirInterfacePagamentos();
+
+        }
+
+
+
+        let distTemp = {};
 
         function abrirInterfacePagamentos() {
-            closeModal();
-            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+
+            const totalMesa = jogadores.reduce((a, b) => a + b.qtd, 0);
+
             distTemp = {};
-            let html = `<div style="background:#e9ecef; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9em"><strong>Total Mesa:</strong> ${totalMesa} entradas</div>`;
-            const ordenados = [...jogadores].sort((a,b)=>(a.posicao||99)-(b.posicao||99));
-            ordenados.forEach(p => {
-                const ganho = getPremiacao(p.posicao, totalMesa);
-                const isFreeroll = (ganho === p.qtd && p.qtd > 0);
-                const saldoObrigatorio = isFreeroll ? 0 : Math.max(0, p.qtd - ganho);
-                if (saldoObrigatorio > 0) distTemp[p.nome] = [{ para: "PENDENTE", qtd: 0, confirmado: false }];
-                html += `<div class="pay-row">
-                    <div style="display:flex; justify-content:space-between; align-items:center">
-                        <span style="display:flex; align-items:center; gap:8px">
-                            ${p.posicao ? `<span class="pos-badge">${p.posicao}º</span>` : ''} 
-                            <strong>${p.nome}</strong>
-                            ${isFreeroll ? `<span class="freeroll-badge">FREROLL</span>` : ''}
-                        </span>
-                        <div style="text-align:right; font-size:0.85em">
-                            <div style="color:var(--green)">Ganha: ${ganho}</div>
-                            <div style="color:var(--red)">Deve: ${p.qtd}</div>
-                        </div>
-                    </div>
-                    ${(!isFreeroll && saldoObrigatorio > 0) ? `<div id="destinos-${p.nome.replace(/\s/g,'_')}"></div>` : ''}
-                </div>`;
+
+
+
+            // Agrupa jogadores por posição REAL (a que foi atribuída)
+
+            const posicoesMap = {};
+
+            jogadores.forEach(j => {
+
+                if (j.posicao) {
+
+                    if (!posicoesMap[j.posicao]) {
+
+                        posicoesMap[j.posicao] = [];
+
+                    }
+
+                    posicoesMap[j.posicao].push(j);
+
+                }
+
             });
-            setTimeout(() => {
-                openModal("Acerto de Contas", html, [{ text: "✓ Finalizar Partida", color: "var(--green)", action: () => validarFinalizacao(), keepOpen: true }, { text: "Cancelar", color: "var(--gray)" }]);
-                Object.keys(distTemp).forEach(nome => reRenderLinhas(nome));
-            }, 100);
+
+
+
+            // Ordena as posições reais em ordem DECRESCENTE (6=pior, 1=melhor)
+
+            // Importante: para distribuir prêmio, a ordem deve ser do MELHOR para o PIOR (1, 2, 3, ...)
+            const posicoesReaisOrdenadas = Object.keys(posicoesMap).map(Number).sort((a, b) => a - b);
+
+
+
+            // Dense ranking para exibição (fecha buracos se existir empate)
+
+            const mapeamentoPosicoes = {};
+            posicoesReaisOrdenadas.forEach((posicaoReal, idx) => {
+                mapeamentoPosicoes[posicaoReal] = idx + 1;
+            });
+
+
+
+            const numPosicoesDistintas = posicoesReaisOrdenadas.length;
+
+
+
+            // Calcula distribuição baseada em posições distintas
+
+            const distComLimite = calcularDistribuicao(totalMesa, numPosicoesDistintas);
+
+            const distSemLimite = calcularDistribuicao(totalMesa);
+
+            const totalPosicoes = distSemLimite.length;
+
+            const jogadoresPagos = Math.min(distComLimite.length, numPosicoesDistintas);
+
+
+
+            let html = `<div style="background:#f8f9fa; padding:10px; border-radius:8px; margin-bottom:15px; text-align:center">
+
+                <div><b>${totalMesa} fichas, ${totalPosicoes} posições, pagando ${jogadoresPagos} colocaç${jogadoresPagos !== 1 ? 'ões' : 'ão'} (${numPosicoesDistintas} distintas)</b></div>
+
+            </div>`;
+
+
+
+            // `indice=0` = 1º lugar, `indice=1` = 2º lugar, etc.
+            posicoesReaisOrdenadas.forEach((posicaoReal, indice) => {
+
+                const jogadoresDaPosicao = posicoesMap[posicaoReal];
+
+                const dist = calcularDistribuicao(totalMesa, numPosicoesDistintas);
+
+                // Usa o ÍNDICE na ordem (0, 1, 2...) não a posição do jogador
+
+                const premiacaoPosicao = dist[indice] || 0;
+
+                const ehEmpate = jogadoresDaPosicao.length > 1;
+
+                const premiacaoPorJogador = ehEmpate ? premiacaoPosicao / jogadoresDaPosicao.length : premiacaoPosicao;
+
+                const premiacaoFormatada = Number.isInteger(premiacaoPorJogador) ? premiacaoPorJogador : premiacaoPorJogador.toFixed(1);
+
+
+
+                // Usa a posição RENUMERADA para exibição
+
+                const posicaoParaExibir = mapeamentoPosicoes[posicaoReal];
+
+
+
+                // Cabeçalho da posição
+
+                html += `<div style="background:#e7f3ff; padding:8px; border-radius:6px; margin:15px 0 8px 0; border-left:4px solid var(--blue)">
+
+                    <strong>${posicaoParaExibir}o lugar: ${premiacaoPosicao} fichas</strong>
+
+                    ${ehEmpate ? `<span style="color:var(--orange); margin-left:8px">⚠️ EMPATE - ${premiacaoFormatada} para cada (÷${jogadoresDaPosicao.length})</span>` : ''}
+
+                </div>`;
+
+
+
+                // Lista jogadores dessa posição
+
+                jogadoresDaPosicao.forEach(p => {
+
+                    const ganho = getPremiacaoCompartilhada(p, totalMesa);
+
+                    const ganhoFormatado = Number.isInteger(ganho) ? ganho : ganho.toFixed(1);
+
+                    const isFreeroll = (ganho === p.qtd && p.qtd > 0);
+
+                    const saldoDever = isFreeroll ? 0 : Math.max(0, p.qtd - ganho);
+
+
+
+                    if (saldoDever > 0) distTemp[p.nome] = [{ para: "PENDENTE", qtd: 0, confirmado: false }];
+
+
+
+                    html += `<div class="pay-row">
+
+                        <div class="pay-info">
+
+                            <span><b>${p.nome}</b> ${isFreeroll ? '<span class="freeroll-badge">FREEROLL</span>' : ''}</span>
+
+                            <small style="color:#666">Deve: ${p.qtd} | Ganha: ${ganhoFormatado}</small>
+
+                        </div>
+
+                        <div id="destinos-${p.nome.replace(/\s/g, '_')}" style="flex:2">
+
+                            ${isFreeroll ? '<div style="text-align:right; color:var(--green); font-weight:bold; font-size:0.9em">QUITADO</div>' : ''}
+
+                        </div>
+
+                    </div>`;
+
+                });
+
+            });
+
+
+
+            openModal("Acerto de Contas", html, [
+
+                { text: "✓ Finalizar Partida", color: "var(--green)", action: () => validarFinalizacao(), keepOpen: true },
+
+                { text: "Voltar", color: "var(--gray)" }
+
+            ]);
+
+            Object.keys(distTemp).forEach(n => reRenderLinhas(n));
+
         }
+
+
 
         function reRenderLinhas(pagador) {
-            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
-            const container = document.getElementById(`destinos-${pagador.replace(/\s/g,'_')}`);
+
+            const totalMesa = jogadores.reduce((a, b) => a + b.qtd, 0);
+
+            const container = document.getElementById(`destinos-${pagador.replace(/\s/g, '_')}`);
+
             if (!container) return;
+
+
+
             let creditosRestantes = {};
+
             jogadores.forEach(j => {
-                const ganho = getPremiacao(j.posicao, totalMesa);
+
+                const ganho = getPremiacaoCompartilhada(j, totalMesa);
+
                 creditosRestantes[j.nome] = Math.max(0, ganho - j.qtd);
+
             });
+
             Object.keys(distTemp).forEach(p => {
-                distTemp[p].forEach(d => { if(d.confirmado && d.para !== "PENDENTE" && d.para !== "SEM_PAGAR") creditosRestantes[d.para] -= d.qtd; });
+
+                distTemp[p].forEach(d => { if (d.confirmado && d.para !== "PENDENTE" && d.para !== "SEM_PAGAR") creditosRestantes[d.para] -= d.qtd; });
+
             });
+
+
+
             const jPagador = jogadores.find(x => x.nome === pagador);
-            const saldoObrigatorio = Math.max(0, jPagador.qtd - getPremiacao(jPagador.posicao, totalMesa));
-            const jaPago = distTemp[pagador].filter(d => d.confirmado).reduce((a,b) => a+b.qtd, 0);
+
+            const saldoObrigatorio = Math.max(0, jPagador.qtd - getPremiacaoCompartilhada(jPagador, totalMesa));
+
+            const jaPago = distTemp[pagador].filter(d => d.confirmado).reduce((a, b) => a + b.qtd, 0);
+
             const faltaPagar = saldoObrigatorio - jaPago;
+
+
+
             container.innerHTML = distTemp[pagador].map((item, idx) => {
+
                 const isConfirmed = item.confirmado;
-                let opts = `<option value="PENDENTE" ${item.para==='PENDENTE'?'selected':''}>⚠️ Selecionar...</option>`;
-                opts += `<option value="SEM_PAGAR" ${item.para==='SEM_PAGAR'?'selected':''} style="color:red; font-weight:bold">🛑 SAIU SEM PAGAR</option>`;
+
+                let opts = `<option value="PENDENTE" ${item.para === 'PENDENTE' ? 'selected' : ''}>⚠️ Selecionar...</option>`;
+
+                opts += `<option value="SEM_PAGAR" ${item.para === 'SEM_PAGAR' ? 'selected' : ''} style="color:red; font-weight:bold">🛑 SAIU SEM PAGAR</option>`;
+
                 jogadores.forEach(j => {
+
                     const disp = creditosRestantes[j.nome];
-                    if (j.nome !== pagador && (disp > 0 || item.para === j.nome)) opts += `<option value="${j.nome}" ${item.para===j.nome?'selected':''}>${j.nome} (Falta: ${disp})</option>`;
+
+                    const dispFormatado = Number.isInteger(disp) ? disp : disp.toFixed(1);
+
+                    if (j.nome !== pagador && (disp > 0 || item.para === j.nome))
+
+                        opts += `<option value="${j.nome}" ${item.para === j.nome ? 'selected' : ''}>${j.nome} (Falta: ${dispFormatado})</option>`;
+
                 });
+
+
+
                 return `<div class="pay-input-group">
-                    <select ${isConfirmed?'disabled':''} onchange="setValAutomatico('${pagador}', ${idx}, this.value, ${faltaPagar})">${opts}</select>
-                    <input type="number" ${isConfirmed?'disabled':''} value="${item.qtd}" id="input-${pagador.replace(/\s/g,'_')}-${idx}" onchange="distTemp['${pagador}'][${idx}].qtd=parseInt(this.value)||0">
-                    <button class="${isConfirmed?'btn-remove':'btn-pay'}" onclick="handlePayClick('${pagador}', ${idx})">${isConfirmed?'Remover':'Pagar'}</button>
+
+                    <select ${isConfirmed ? 'disabled' : ''} onchange="setValAutomatico('${pagador}', ${idx}, this.value, ${faltaPagar})">${opts}</select>
+
+                    <input type="number" step="0.5" ${isConfirmed ? 'disabled' : ''} value="${item.qtd}" id="input-${pagador.replace(/\s/g, '_')}-${idx}" onchange="distTemp['${pagador}'][${idx}].qtd=parseFloat(this.value)||0">
+
+                    <button class="${isConfirmed ? 'btn-remove' : 'btn-pay'}" onclick="handlePayClick('${pagador}', ${idx})">${isConfirmed ? 'Remover' : 'Pagar'}</button>
+
                 </div>`;
+
             }).join('');
+
         }
+
+
 
         function setValAutomatico(pagador, idx, destino, faltaPagar) {
-            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+
+            const totalMesa = jogadores.reduce((a, b) => a + b.qtd, 0);
+
             distTemp[pagador][idx].para = destino;
+
             if (destino === "SEM_PAGAR") {
-                distTemp[pagador][idx].qtd = faltaPagar;
-                document.getElementById(`input-${pagador.replace(/\s/g,'_')}-${idx}`).value = faltaPagar;
+
+                const valorArredondado = Math.round(faltaPagar * 2) / 2; // Arredonda para 0.5
+
+                distTemp[pagador][idx].qtd = valorArredondado;
+
+                document.getElementById(`input-${pagador.replace(/\s/g, '_')}-${idx}`).value = valorArredondado;
+
             } else if (destino !== "PENDENTE") {
+
                 let jaSendoPago = 0;
+
                 Object.keys(distTemp).forEach(p => {
-                    distTemp[p].forEach(d => { if(d.confirmado && d.para === destino) jaSendoPago += d.qtd; });
+
+                    distTemp[p].forEach(d => { if (d.confirmado && d.para === destino) jaSendoPago += d.qtd; });
+
                 });
+
                 const jDest = jogadores.find(x => x.nome === destino);
-                const ganhoLiquido = Math.max(0, getPremiacao(jDest.posicao, totalMesa) - jDest.qtd);
+
+                const ganhoLiquido = Math.max(0, getPremiacaoCompartilhada(jDest, totalMesa) - jDest.qtd);
+
                 const valorSugerido = Math.min(faltaPagar, ganhoLiquido - jaSendoPago);
-                distTemp[pagador][idx].qtd = valorSugerido;
-                document.getElementById(`input-${pagador.replace(/\s/g,'_')}-${idx}`).value = valorSugerido;
+
+                const valorArredondado = Math.round(valorSugerido * 2) / 2; // Arredonda para 0.5
+
+                distTemp[pagador][idx].qtd = valorArredondado;
+
+                document.getElementById(`input-${pagador.replace(/\s/g, '_')}-${idx}`).value = valorArredondado;
+
             }
+
         }
+
+
 
         function handlePayClick(pagador, idx) {
+
             const item = distTemp[pagador][idx];
+
             if (item.confirmado) {
+
                 distTemp[pagador].splice(idx, 1);
+
                 if (distTemp[pagador].length === 0) distTemp[pagador].push({ para: "PENDENTE", qtd: 0, confirmado: false });
+
             } else {
+
                 if (item.para === "PENDENTE" || item.qtd <= 0) { alert("Selecione o destino e o valor."); return; }
+
                 item.confirmado = true;
-                const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+
+                const totalMesa = jogadores.reduce((a, b) => a + b.qtd, 0);
+
                 const j = jogadores.find(x => x.nome === pagador);
-                const saldoObrigatorio = Math.max(0, j.qtd - getPremiacao(j.posicao, totalMesa));
-                const totalConfirmado = distTemp[pagador].filter(d => d.confirmado).reduce((a,b) => a+b.qtd, 0);
+
+                const saldoObrigatorio = Math.max(0, j.qtd - getPremiacaoCompartilhada(j, totalMesa));
+
+                const totalConfirmado = distTemp[pagador].filter(d => d.confirmado).reduce((a, b) => a + b.qtd, 0);
+
                 if (totalConfirmado < saldoObrigatorio) distTemp[pagador].push({ para: "PENDENTE", qtd: 0, confirmado: false });
+
             }
-            reRenderLinhas(pagador);
+
+
+
+            Object.keys(distTemp).forEach(nome => reRenderLinhas(nome));
+
         }
+
+
 
         function validarFinalizacao() {
-            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+
+            const totalMesa = jogadores.reduce((a, b) => a + b.qtd, 0);
+
+            let resumo = [];
+
             for (let p in distTemp) {
-                const j = jogadores.find(x=>x.nome===p);
-                const saldoObrigatorio = Math.max(0, j.qtd - getPremiacao(j.posicao, totalMesa));
-                const totalConfirmado = distTemp[p].filter(d=>d.confirmado).reduce((a,b)=>a+b.qtd, 0);
-                if (totalConfirmado !== saldoObrigatorio) { alert(`A soma de ${p} deve ser ${saldoObrigatorio}`); return; }
-            }
-            let logs = [];
-            let creditosGerais = {};
-            jogadores.forEach(j => { 
-                const g = getPremiacao(j.posicao, totalMesa);
-                creditosGerais[j.nome] = Math.max(0, g - j.qtd);
-            });
-            for (let p in distTemp) {
-                distTemp[p].forEach(d => {
-                    if(d.confirmado) {
-                        if(d.para === "SEM_PAGAR") logs.push(`<span class="debt-log">${p} DEVENDO ${d.qtd}</span>`);
-                        else {
-                            logs.push(`${p} → ${d.para} (${d.qtd})`);
-                            creditosGerais[d.para] -= d.qtd;
-                        }
-                    }
-                });
-            }
-            Object.keys(creditosGerais).forEach(nome => {
-                if(creditosGerais[nome] > 0) logs.push(`<span class="credit-log">${nome} FALTOU RECEBER ${creditosGerais[nome]}</span>`);
-            });
-            jogadores.forEach(j => { if(getPremiacao(j.posicao, totalMesa) === j.qtd && j.qtd > 0) logs.push(`${j.nome} (FREROLL)`); });
-            finalizarArquivamento(logs.join(' | ') || 'Acerto concluído');
-        }
 
-        function formatarDuracao(ms) {
-            const totalSegundos = Math.floor(ms / 1000);
-            const h = Math.floor(totalSegundos / 3600);
-            const m = Math.floor((totalSegundos % 3600) / 60);
-            const s = totalSegundos % 60;
-            return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
-        }
+                const j = jogadores.find(x => x.nome === p);
 
-        function finalizarArquivamento(financeiro) {
-            const endTimeReal = Date.now();
-            const duracaoMs = startTimeReal ? (endTimeReal - startTimeReal) : 0;
-            const total = jogadores.reduce((a,b)=>a+b.qtd,0);
-            const rankingData = jogadores.filter(j=>j.posicao).sort((a,b)=>a.posicao-b.posicao).map(j=>({
-                pos: j.posicao, nome: j.nome, 
-                ganho: getPremiacao(j.posicao, total), investido: j.qtd
-            }));
+                const saldo = Math.max(0, j.qtd - getPremiacaoCompartilhada(j, totalMesa));
 
-            historico.unshift({ 
-                data: new Date().toLocaleString('pt-BR'), 
-                duracao: formatarDuracao(duracaoMs),
-                total, 
-                ranking: rankingData, 
-                detalhes: financeiro 
-            });
+                const pago = distTemp[p].filter(d => d.confirmado).reduce((a, b) => a + b.qtd, 0);
 
-            jogadores.forEach(j => { j.qtd = 0; j.eliminado = false; j.posicao = null; });
-            elimOrder = []; resetAllTimers(); gameStarted = false; startTimeReal = null;
-            render(); renderHistorico(); save(); closeModal();
-        }
 
-        function visualizarPartida(index) {
-            const h = historico[index];
-            let rankingHtml = h.ranking.map(r => {
-                const saldo = r.ganho - r.investido;
-                const saldoTexto = saldo >= 0 ? `(+${saldo})` : `(${saldo})`;
-                const corSaldo = saldo > 0 ? 'var(--green)' : (saldo < 0 ? 'var(--red)' : 'var(--gray)');
-                return `<div style="margin-bottom:5px">
-                    <span class="pos-badge">${r.pos}º</span> <strong>${r.nome}</strong> 
-                    <span style="color:${corSaldo}; font-weight:bold; font-size:0.9em">${saldoTexto} entradas</span>
-                </div>`;
-            }).join('');
-            let html = `<div style="background:#f8f9fa; padding:15px; border-radius:10px; border:1px solid #ddd">
-                <div style="margin-bottom:5px"><strong>Data:</strong> ${h.data}</div>
-                <div style="margin-bottom:10px"><strong>Duração Real:</strong> ${h.duracao || 'N/A'}</div>
-                <div style="margin-bottom:10px"><strong>Entradas Totais:</strong> ${h.total}</div>
-                <div style="margin-bottom:15px; padding-bottom:10px; border-bottom:2px solid #eee">
-                    <strong>Podium e Saldo:</strong><br>${rankingHtml}
-                </div>
-                <div><strong>Distribuição Financeira:</strong></div>
-                <div style="margin-top:8px">
-                    ${h.detalhes.split('|').map(d => `<div class="view-row">${d.trim()}</div>`).join('')}
-                </div>
-            </div>`;
-            openModal("Detalhes da Partida", html, [{text: "Fechar", color: "var(--dark)"}]);
-        }
 
-        // --- SISTEMA DE CRONÔMETRO ---
-        function toggleMasterPause() { 
-            isRunning = !isRunning; 
-            if(isRunning){ 
-                if(!startTimeReal) startTimeReal = Date.now(); // Marca o início real da partida
-                gameStarted = true; 
-                lastTime = Date.now();
-                masterInterval = setInterval(tick, 200);
-            } else {
-                clearInterval(masterInterval);
-            }
-            const b = document.getElementById('masterPause');
-            b.innerText = isRunning ? "PAUSAR" : "RETOMAR";
-            b.style.background = isRunning ? "var(--orange)":"var(--green)";
-            render(); 
-        }
+                // Tolerância de 0.01 para lidar com arredondamentos decimais
 
-        function tick() {
-            if (!isRunning) return;
-            const now = Date.now();
-            const delta = (now - lastTime) / 1000;
-            if (delta >= 1) {
-                const secondsToAdvance = Math.floor(delta);
-                elapsedSeconds += secondsToAdvance;
-                lastTime += secondsToAdvance * 1000;
-                if (elapsedSeconds >= activeLevel) {
-                    elapsedSeconds = 0;
-                    const currentIndex = levels.indexOf(activeLevel);
-                    selectLevel(levels[(currentIndex + 1) % levels.length]);
+                if (Math.abs(pago - saldo) > 0.01) {
+
+                    const saldoFormatado = Number.isInteger(saldo) ? saldo : saldo.toFixed(1);
+
+                    return alert(`O valor total pago por ${p} deve ser ${saldoFormatado}. Falta acertar.`);
+
                 }
-                updateTimerDisplays();
+
+
+
+                distTemp[p].forEach(d => {
+
+                    if (d.confirmado) {
+
+                        const valorFormatado = Number.isInteger(d.qtd) ? d.qtd : d.qtd.toFixed(1);
+
+                        resumo.push(d.para === "SEM_PAGAR" ? `<span style="color:red"><b>${p} CALOTE (${valorFormatado})</b></span>` : `${p}→${d.para}(${valorFormatado})`);
+
+                    }
+
+                });
+
             }
+
+            jogadores.forEach(j => {
+
+                if (getPremiacaoCompartilhada(j, totalMesa) === j.qtd && j.qtd > 0)
+
+                    resumo.push(`<b>${j.nome} (FREEROLL)</b>`);
+
+            });
+
+
+
+            const fimPartida = new Date();
+
+            let duracaoTexto = "Duração não registrada";
+
+            if (inicioPartida) {
+
+                const duracaoMs = fimPartida - inicioPartida;
+
+                const horas = Math.floor(duracaoMs / 3600000);
+
+                const minutos = Math.floor((duracaoMs % 3600000) / 60000);
+
+                const segundos = Math.floor((duracaoMs % 60000) / 1000);
+
+
+
+                if (horas > 0) {
+
+                    duracaoTexto = `${horas}h ${minutos}m ${segundos}s`;
+
+                } else if (minutos > 0) {
+
+                    duracaoTexto = `${minutos}m ${segundos}s`;
+
+                } else {
+
+                    duracaoTexto = `${segundos}s`;
+
+                }
+
+            }
+
+
+
+            historico.unshift({
+
+                data: new Date().toLocaleString('pt-BR'),
+
+                inicio: inicioPartida ? inicioPartida.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--',
+
+                fim: fimPartida.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+
+                duracao: duracaoTexto,
+
+                total: totalMesa,
+
+                numJogadores: jogadores.length,
+
+                placar: jogadores.filter(j => j.posicao).sort((a, b) => a.posicao - b.posicao).map(j => {
+
+                    const jogadoresMesmaPosicao = jogadores.filter(x => x.posicao === j.posicao && x.emEmpate);
+
+                    const empate = j.emEmpate && jogadoresMesmaPosicao.length > 1 ? ` (EMPATE ${jogadoresMesmaPosicao.length}x)` : '';
+
+                    return `${j.posicao}o ${j.nome}${empate}`;
+
+                }),
+
+                financeiro: resumo.join(' | ')
+
+            });
+
+
+
+            jogadores.forEach(j => {
+
+                j.qtd = 0;
+
+                j.eliminado = false;
+
+                j.posicao = null;
+
+                j.emEmpate = false; // Reseta a flag de empate
+
+            });
+
+
+
+            clearInterval(masterInterval);
+
+            releaseWakeLock();
+
+            isRunning = false;
+
+            tempoDecorrido = 0;
+
+            inicioPartida = null;
+
+            partidaIniciada = false;
+
+            document.getElementById('masterPause').innerText = "INICIAR PARTIDA";
+
+            document.getElementById('masterPause').style.background = "var(--green)";
+
+            selectLevel(600);
+
+            // Esconde o botão de eliminar múltiplos após finalizar a partida
+
+            document.getElementById('btnEliminarMultiplos').style.display = 'none';
+
+            closeModal(); render(); renderHistorico(); save();
+
         }
 
-        function selectLevel(l) { 
-            activeLevel = l; 
-            levels.forEach(id => { document.getElementById(`card-${id}`).className = (id === l ? 'timer-card active' : 'timer-card'); });
-            updateTimerDisplays(); 
+
+
+        function renderHistorico() {
+
+            const section = document.getElementById('historicoSection');
+
+            if (historico.length === 0) { section.style.display = 'none'; return; }
+
+            section.style.display = 'block';
+
+            document.getElementById('historicoLista').innerHTML = historico.map((h, i) => `
+
+                <div class="history-card" onclick="verDetalhesPartida(${i})">
+
+                    <div style="display:flex; justify-content:space-between; font-size:0.9em">
+
+                        <b>Data: ${h.data}</b> 
+
+                        <b>Total: ${h.total}</b>
+
+                    </div>
+
+                    ${h.duracao ? `<div style="font-size:0.8em; color:var(--blue); margin:3px 0">⏱️ Duração: ${h.duracao}</div>` : ''}
+
+                    <div style="font-size:0.85em; margin:5px 0; color:var(--purple)">🏆 ${h.placar ? h.placar.join(', ') : 'Sem placar'}</div>
+
+                    <div style="font-size:0.8em; border-top:1px dashed #ccc; padding-top:5px; color:#555">${h.financeiro}</div>
+
+                </div>
+
+            `).join('');
+
         }
 
-        function updateTimerDisplays() { 
-            levels.forEach(l => { 
-                let s = (l === activeLevel) ? (l - elapsedSeconds) : l; 
-                if (s < 0) s = 0;
-                document.getElementById(`disp-${l}`).innerText = `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; 
-            }); 
+
+
+        function verDetalhesPartida(index) {
+
+            const h = historico[index];
+
+            const dist = calcularDistribuicao(h.total, h.numJogadores || null);
+
+
+
+            let detalhesHTML = `
+
+                <div style="background:#f8f9fa; padding:10px; border-radius:8px; margin-bottom:15px">
+
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px">
+
+                        <span><b>Data:</b> ${h.data}</span>
+
+                        <span><b>Total:</b> ${h.total} fichas</span>
+
+                    </div>
+
+                    ${h.inicio && h.fim ? `
+
+                    <div style="display:flex; justify-content:space-between; font-size:0.9em; color:var(--blue); margin-top:5px">
+
+                        <span>⏰ Início: ${h.inicio}</span>
+
+                        <span>🏁 Fim: ${h.fim}</span>
+
+                    </div>
+
+                    ` : ''}
+
+                    ${h.duracao ? `
+
+                    <div style="text-align:center; font-weight:bold; color:var(--green); margin-top:5px; font-size:1.1em">
+
+                        ⏱️ Duração: ${h.duracao}
+
+                    </div>
+
+                    ` : ''}
+
+                </div>
+
+                
+
+                <div style="margin-bottom:15px">
+
+                    <h4 style="margin:5px 0; color:var(--purple)">🏆 Placar Final</h4>
+
+                    ${h.placar ? h.placar.map(p => `<div style="padding:5px; border-bottom:1px solid #eee">${p}</div>`).join('') : '<p>Sem placar</p>'}
+
+                </div>
+
+                
+
+                <div style="margin-bottom:15px">
+
+                    <h4 style="margin:5px 0; color:var(--blue)">💰 Distribuição de Prêmios</h4>
+
+                    ${dist.map((v, idx) => `<div style="padding:5px; border-bottom:1px solid #eee"><b>${idx + 1}o Lugar:</b> ${v} fichas</div>`).join('')}
+
+                </div>
+
+                
+
+                <div>
+
+                    <h4 style="margin:5px 0; color:var(--orange)">💸 Transações Financeiras</h4>
+
+                    <div style="padding:10px; background:#f8f9fa; border-radius:6px; font-size:0.9em">
+
+                        ${h.financeiro || 'Nenhuma transação registrada'}
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+
+            openModal(`Detalhes da Partida #${historico.length - index}`, detalhesHTML, [
+
+                { text: "Fechar", color: "var(--gray)" }
+
+            ]);
+
         }
 
-        function resetAllTimers() { clearInterval(masterInterval); isRunning = false; elapsedSeconds = 0; lastTime = null; selectLevel(600); document.getElementById('masterPause').innerText = "INICIAR PARTIDA"; }
 
-        // --- GESTÃO DE JOGADORES ---
-        function handlePlayerAction(i) { const j=jogadores[i]; if(!gameStarted && j.qtd===0){ openModal("Remover",`Remover ${j.nome}?`,[{text:"Sim",color:"var(--red)",action:()=>{jogadores.splice(i,1);render();save();}},{text:"Não"}]); } else if(j.eliminado){ j.eliminado=false; elimOrder=elimOrder.map(g=>g.filter(x=>x!==i)).filter(g=>g.length>0); render(); save(); } else { openModal("Sair",`Como ${j.nome} saiu?`,[{text:"Normal",color:"var(--red)",action:()=>confirmElim(i,false)},{text:"Empate",color:"var(--orange)",action:()=>confirmElim(i,true)}]); } }
-        function confirmElim(idx, empate) { jogadores[idx].eliminado=true; if(empate && elimOrder.length>0) elimOrder[elimOrder.length-1].push(idx); else elimOrder.push([idx]); render(); save(); const ativos = jogadores.filter(j => !j.eliminado); if(ativos.length === 1 && jogadores.length > 1){ ativos[0].posicao = 1; render(); setTimeout(() => { openModal("🏆 Fim", `Vencedor: ${ativos[0].nome}`, [{text:"Pagamentos",color:"var(--green)",action:()=>abrirInterfacePagamentos()},{text:"Ajustar"}]); }, 400); } }
-        function change(i,d){ jogadores[i].qtd=Math.max(0,jogadores[i].qtd+d); render(); save(); }
-        
-        function render() { 
-            const lista=document.getElementById('lista'); 
-            lista.innerHTML=''; 
-            let posElim = jogadores.length; 
-            let tempPos = {}; 
-            let totalEntradas = 0;
-            elimOrder.forEach(g => { g.forEach(idx => tempPos[idx] = posElim - (g.length - 1)); posElim -= g.length; }); 
-            const vencedor = jogadores.find(j => !j.eliminado); 
-            jogadores.forEach((j,i)=>{ 
-                totalEntradas += j.qtd;
-                let pos = null; 
-                if (j.eliminado) { pos = tempPos[i]; } else if (vencedor && (jogadores.filter(x => !x.eliminado).length === 1) && jogadores.length > 1) { pos = 1; } j.posicao = pos; 
-                const canRem = !gameStarted && j.qtd === 0; 
-                lista.innerHTML+=`<li class="${j.eliminado?'out':''}"><div>${pos ? `<span class="pos-badge">${pos}º</span>` : ''}<strong>${j.nome}</strong></div><div style="display:flex;align-items:center;gap:5px"><button onclick="change(${i},-1)">-</button><span>${j.qtd}</span><button onclick="change(${i},1)">+</button><button class="btn-action" style="background:${canRem?'#6c757d':'#343a40'}" onclick="handlePlayerAction(${i})">${canRem?'Remover':(j.eliminado?'Reviver':'Sair')}</button></div></li>`; 
-            }); 
-            document.getElementById('totalDisplay').innerText = `TOTAL DE ENTRADAS: ${totalEntradas}`;
+
+        function limparHistorico() { if (confirm("Apagar todo o histórico?")) { historico = []; save(); renderHistorico(); } }
+
+
+
+        function openModal(title, contentHTML, buttons) {
+
+            const modal = document.getElementById('pokerModal');
+
+            document.getElementById('modalTitle').innerText = title;
+
+            document.getElementById('modalContent').innerHTML = contentHTML;
+
+            const btnArea = document.getElementById('modalButtons');
+
+            btnArea.innerHTML = '';
+
+            buttons.forEach(btn => {
+
+                const b = document.createElement('button');
+
+                b.innerText = btn.text;
+
+                b.style.background = btn.color || 'var(--gray)';
+
+                b.style.color = 'white';
+
+                b.style.padding = '12px';
+
+                b.onclick = () => { if (btn.action) btn.action(); if (!btn.keepOpen) closeModal(); };
+
+                btnArea.appendChild(b);
+
+            });
+
+            modal.classList.remove('hidden');
+
         }
 
-        function renderHistorico() { const c=document.getElementById('historicoSection'); if(historico.length===0){c.style.display='none';return;} c.style.display='block'; document.getElementById('historicoLista').innerHTML=historico.map((h, idx)=>{ 
-            const podioCurto = Array.isArray(h.ranking) ? h.ranking.slice(0, 3).map(r => `${r.pos}º ${r.nome}`).join(' | ') : h.ranking;
-            return `<div class="history-card" onclick="visualizarPartida(${idx})"><b>${h.data}</b><br><small>${podioCurto}</small></div>`
-        }).join(''); }
 
-        window.onload=()=>{ selectLevel(600); render(); renderHistorico(); };
+
+        function closeModal() { document.getElementById('pokerModal').classList.add('hidden'); }
+
+
+
+        window.onload = () => { render(); renderHistorico(); selectLevel(600); };
+
     </script>
+
 </body>
+
+
+
 </html>
