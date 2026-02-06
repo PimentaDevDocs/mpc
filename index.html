@@ -742,6 +742,8 @@
 
         let levelEndHandled = false;
 
+        let levelSwitchTime = null;
+
         let tempoDecorrido = 0;
 
         let inicioPartida = null;
@@ -840,13 +842,25 @@
 
             if (isRunning) {
 
-                const tempoGastoNesteNivel = activeLevel - remainingSeconds;
+                const now = Date.now();
+
+                const segundosReaisNesteNivel = levelSwitchTime != null ? (now - levelSwitchTime) / 1000 : 0;
+
+                const tempoGastoNesteNivel = Math.min(
+
+                    Math.max(0, activeLevel - remainingSeconds),
+
+                    Math.floor(segundosReaisNesteNivel)
+
+                );
 
                 tempoDecorrido += tempoGastoNesteNivel;
 
 
 
                 activeLevel = l;
+
+                levelSwitchTime = now;
 
                 remainingSeconds = Math.max(0, l - tempoDecorrido);
 
@@ -952,7 +966,7 @@
 
                 levelEndTime = Date.now() + remainingSeconds * 1000;
 
-
+                levelSwitchTime = Date.now();
 
                 render();
 
@@ -1016,7 +1030,7 @@
 
                         levelEndTime = Date.now() + remainingSeconds * 1000;
 
-
+                        levelSwitchTime = Date.now();
 
                         levels.forEach(lvl => {
 
