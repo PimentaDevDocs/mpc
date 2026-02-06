@@ -1,414 +1,358 @@
 <!DOCTYPE html>
 <html lang="pt-pt">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Minhoca Poker Club</title>
+    <title>Minhoca Poker - Sistema Financeiro</title>
     <style>
         :root {
-            --red: #dc3545;
-            --green: #28a745;
-            --blue: #007bff;
-            --dark: #343a40;
-            --gray: #6c757d;
+            --red: #dc3545; --green: #28a745; --blue: #007bff;
+            --orange: #fd7e14; --dark: #343a40; --gray: #6c757d; --purple: #6f42c1;
         }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            max-width: 850px;
-            margin: 10px auto;
-            background: #f0f2f5;
-            padding: 10px;
-        }
-
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
-        }
-
-        /* Timers */
-        .timers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .timer-card {
-            background: var(--dark);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .timer-display {
-            font-size: 2rem;
-            font-family: monospace;
-            color: #00ff00;
-            margin: 5px 0;
-        }
-
-        @keyframes blinker {
-            50% {
-                background-color: var(--red);
-            }
-        }
-
-        .timer-card.alarm-active {
-            animation: blinker 0.4s linear infinite;
-        }
-
-        /* Interface */
-        .input-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        input {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        button {
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            padding: 10px;
-        }
-
-        .btn-add {
-            background: var(--blue);
-            color: white;
-        }
-
-        .btn-minus {
-            background: var(--red);
-            color: white;
-            width: 35px;
-        }
-
-        .btn-plus {
-            background: var(--blue);
-            color: white;
-            width: 35px;
-        }
-
-        .btn-remove {
-            background: var(--red);
-            color: white;
-            font-size: 0.8em;
-        }
-
-        .btn-remove:disabled {
-            background: #ccc;
-            opacity: 0.5;
-        }
-
-        .btn-finish {
-            background: var(--green);
-            color: white;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1em;
-            margin-top: 15px;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            background: #fff;
-            margin-bottom: 5px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .qty {
-            font-weight: bold;
-            min-width: 25px;
-            text-align: center;
-        }
-
-        /* Resultados e Placar */
-        .result-box {
-            background: #e7f3ff;
-            border-left: 5px solid var(--blue);
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .history-card {
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .placar-final {
-            margin-top: 8px;
-            padding: 8px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border: 1px dashed #ccc;
-            font-size: 0.85em;
-            color: #333;
-        }
-
-        .placar-item {
-            display: inline-block;
-            margin-right: 10px;
-            padding: 2px 5px;
-            background: #eee;
-            border-radius: 4px;
-        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; max-width: 850px; margin: 10px auto; background: #f0f2f5; padding: 10px; }
+        .container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .timers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        .timer-card { background: #dee2e6; color: #343a40; padding: 15px; border-radius: 10px; text-align: center; opacity: 0.6; }
+        .timer-card.active { background: var(--dark); color: white; border: 3px solid var(--green); opacity: 1; transform: scale(1.05); }
+        .timer-display { font-size: 1.8rem; font-family: monospace; font-weight: bold; }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); z-index: 9999; padding: 20px; overflow-y: auto; display: flex; align-items: center; justify-content: center; }
+        .modal-overlay.hidden { display: none !important; }
+        .modal { background: white; padding: 25px; border-radius: 15px; max-width: 550px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative; }
+        .modal h3 { margin-top: 0; margin-bottom: 10px; color: var(--dark); }
+        .modal-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .modal-buttons button { width: 100%; padding: 14px; font-size: 15px; }
+        .pay-row { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 2px solid #e0e0e0; }
+        .pay-input-group { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+        .pay-input-group select, .pay-input-group input { padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+        .pay-input-group select { flex: 1; min-width: 0; }
+        .pay-input-group input { width: 70px; text-align: center; font-weight: bold; }
+        .pay-input-group button { padding: 8px 12px; font-size: 13px; font-weight: bold; color: white; border-radius: 6px; min-width: 80px; }
+        .btn-pay { background: var(--blue); }
+        .btn-remove { background: var(--red); }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #fff; margin-bottom: 8px; border-radius: 8px; border: 1px solid #ddd; }
+        li.out { background: #f8f9fa; opacity: 0.6; border-left: 4px solid var(--red); }
+        button { border: none; border-radius: 6px; cursor: pointer; font-weight: bold; padding: 10px; transition: all 0.2s; }
+        .btn-action { color: white; min-width: 100px; }
+        .pos-badge { background: var(--purple); color: white; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-right: 8px; }
+        .freeroll-badge { background: #fff3cd; color: #856404; padding: 4px 10px; border-radius: 6px; font-weight: 800; border: 1px solid #ffeeba; font-size: 0.75em; letter-spacing: 0.5px; }
+        .history-card { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 5px solid var(--blue); cursor: pointer; }
+        .debt-log { color: var(--red); font-weight: bold; }
+        .credit-log { color: var(--orange); font-weight: bold; }
+        .view-row { font-size: 0.9em; padding: 5px 0; border-bottom: 1px solid #eee; }
+        .total-banner { background: var(--dark); color: white; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem; border-bottom: 4px solid var(--green); }
     </style>
 </head>
-
 <body>
-
+    <div id="pokerModal" class="modal-overlay hidden">
+        <div class="modal"><h3 id="modalTitle"></h3><div id="modalContent"></div><div class="modal-buttons" id="modalButtons"></div></div>
+    </div>
     <div class="timers-grid">
-        <div class="timer-card" id="t10">
-            <div class="timer-display">10:00</div>
-            <button onclick="toggleTimer('t10', 600)" style="background:var(--green); color:white">Play</button>
-            <button onclick="resetIndividual('t10', 600)" style="background:var(--gray); color:white">Reset</button>
-        </div>
-        <div class="timer-card" id="t7">
-            <div class="timer-display">07:00</div>
-            <button onclick="toggleTimer('t7', 420)" style="background:var(--green); color:white">Play</button>
-            <button onclick="resetIndividual('t7', 420)" style="background:var(--gray); color:white">Reset</button>
-        </div>
-        <div class="timer-card" id="t2">
-            <div class="timer-display">02:00</div>
-            <button onclick="toggleTimer('t2', 120)" style="background:var(--green); color:white">Play</button>
-            <button onclick="resetIndividual('t2', 120)" style="background:var(--gray); color:white">Reset</button>
-        </div>
+        <div class="timer-card" id="card-600"><div class="timer-display" id="disp-600">10:00</div><button onclick="selectLevel(600)" style="width:100%; font-size:0.7em">NÍVEL 1</button></div>
+        <div class="timer-card" id="card-420"><div class="timer-display" id="disp-420">07:00</div><button onclick="selectLevel(420)" style="width:100%; font-size:0.7em">NÍVEL 2</button></div>
+        <div class="timer-card" id="card-300"><div class="timer-display" id="disp-300">05:00</div><button onclick="selectLevel(300)" style="width:100%; font-size:0.7em">NÍVEL 3</button></div>
+        <div class="timer-card" id="card-120"><div class="timer-display" id="disp-120">02:00</div><button onclick="selectLevel(120)" style="width:100%; font-size:0.7em">NÍVEL 4</button></div>
     </div>
-
     <div class="container">
-        <div class="input-row">
-            <input type="text" id="nomeInput" placeholder="Nome do Jogador..." autocomplete="off">
-            <button class="btn-add" onclick="add()">Add</button>
-        </div>
+        <button id="masterPause" onclick="toggleMasterPause()" style="width:100%; background:var(--green); color:white; margin-bottom:15px; padding:18px; font-size:1.2rem">INICIAR PARTIDA</button>
+        <div style="display: flex; gap: 8px; margin-bottom: 15px;"><input type="text" id="nomeInput" placeholder="Nome do Jogador..." style="flex:1; padding:12px; border-radius:8px; border:1px solid #ddd"><button onclick="add()" style="background:var(--blue); color:white; width:80px">Add</button></div>
+        <div class="total-banner" id="totalDisplay">TOTAL DE ENTRADAS: 0</div>
         <ul id="lista"></ul>
-        <div id="calculoAtual" style="display:none">
-            <hr>
-            <p>Total Entradas: <strong id="totalTxt">0</strong></p>
-            <div id="dist"></div>
-            <button class="btn-finish" onclick="finalizarPartida()">Finalizar Partida</button>
-        </div>
     </div>
-
-    <div class="container" id="historicoSection" style="display:none">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3>Histórico de Partidas</h3>
-            <button onclick="limparHistorico()"
-                style="background:var(--gray); color:white; font-size:0.7em">Limpar</button>
-        </div>
-        <div id="historicoLista"></div>
-    </div>
+    <div class="container" id="historicoSection" style="display:none"><h3>Histórico de Partidas</h3><div id="historicoLista"></div></div>
 
     <script>
         let jogadores = JSON.parse(localStorage.getItem('poker_jogadores')) || [];
         let historico = JSON.parse(localStorage.getItem('poker_historico')) || [];
-        let startTimePartida = localStorage.getItem('poker_startTime') ? new Date(localStorage.getItem('poker_startTime')) : null;
-        let audioCtx = null;
+        let elimOrder = [], isRunning = false, gameStarted = false, activeLevel = 600, masterInterval = null, distTemp = {};
+        const levels = [600, 420, 300, 120];
 
-        const timersData = {
-            t10: { timeLeft: 600, interval: null, running: false, alarm: null },
-            t7: { timeLeft: 420, interval: null, running: false, alarm: null },
-            t2: { timeLeft: 120, interval: null, running: false, alarm: null }
-        };
+        // Cronômetro e Tempos Reais
+        let elapsedSeconds = 0;
+        let lastTime = null;
+        let startTimeReal = null; // Quando o botão "Iniciar" foi clicado pela 1ª vez
 
-        window.onload = () => { render(); renderHistorico(); };
+        function save() { localStorage.setItem('poker_jogadores', JSON.stringify(jogadores)); localStorage.setItem('poker_historico', JSON.stringify(historico)); }
+        function add() { const val = document.getElementById('nomeInput').value.trim(); if (val) { jogadores.push({ nome: val, qtd: 0, eliminado: false, posicao: null }); document.getElementById('nomeInput').value = ''; render(); save(); } }
+        function openModal(title, contentHTML, buttons) { const modal = document.getElementById('pokerModal'); document.getElementById('modalTitle').innerText = title; document.getElementById('modalContent').innerHTML = contentHTML; const btnArea = document.getElementById('modalButtons'); btnArea.innerHTML = ''; buttons.forEach(btn => { const b = document.createElement('button'); b.innerText = btn.text; b.style.background = btn.color || 'var(--gray)'; b.style.color = 'white'; b.onclick = () => { if(btn.action) btn.action(); if(!btn.keepOpen) closeModal(); }; btnArea.appendChild(b); }); modal.classList.remove('hidden'); }
+        function closeModal() { document.getElementById('pokerModal').classList.add('hidden'); }
 
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function getPremiacao(pos, total) {
+            if (!pos) return 0;
+            if (pos === 1) return Math.floor(total * 0.6);
+            if (pos === 2) return Math.floor(total * 0.3);
+            if (pos === 3) return total - (Math.floor(total * 0.6) + Math.floor(total * 0.3));
+            return 0;
         }
 
-        function playBeep() {
-            if (!audioCtx) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-        }
-
-        function saveToLocal() {
-            localStorage.setItem('poker_jogadores', JSON.stringify(jogadores));
-            localStorage.setItem('poker_historico', JSON.stringify(historico));
-            if (startTimePartida) localStorage.setItem('poker_startTime', startTimePartida.toISOString());
-            else localStorage.removeItem('poker_startTime');
-        }
-
-        // --- LÓGICA DE CÁLCULO (Sequência solicitada) ---
-        function calcularDistribuicao(total) {
-            let pos = [0]; let saldo = total;
-            let inicial = Math.min(4, saldo); pos[0] = inicial; saldo -= inicial;
-            while (saldo > 0) {
-                let u = pos.length - 1;
-                if (pos[u] >= (pos.length === 1 ? 0 : 3)) { pos.push(1); saldo--; if (saldo <= 0) break; }
-                for (let i = 0; i < pos.length; i++) {
-                    if (i === pos.length - 1 && pos[i] >= 3 && pos.length > 1) continue;
-                    if (saldo > 0) { pos[i]++; saldo--; }
-                }
-            }
-            return pos;
-        }
-
-        function toggleTimer(id, initialSecs) {
-            initAudio();
-            const t = timersData[id];
-            const card = document.getElementById(id);
-            if (!startTimePartida) { startTimePartida = new Date(); saveToLocal(); render(); }
-            if (t.running) { clearInterval(t.interval); t.running = false; }
-            else {
-                if (t.timeLeft <= 0) return;
-                t.running = true;
-                t.interval = setInterval(() => {
-                    if (t.timeLeft > 0) { t.timeLeft--; updateTimerDisplay(id); }
-                    else {
-                        clearInterval(t.interval); t.running = false;
-                        card.classList.add('alarm-active');
-                        t.alarm = setInterval(playBeep, 1000);
-                    }
-                }, 1000);
-            }
-            render();
-        }
-
-        function resetIndividual(id, secs) {
-            const t = timersData[id];
-            clearInterval(t.interval); clearInterval(t.alarm);
-            document.getElementById(id).classList.remove('alarm-active');
-            t.running = false; t.timeLeft = secs;
-            updateTimerDisplay(id); render();
-        }
-
-        function updateTimerDisplay(id) {
-            const t = timersData[id];
-            let m = Math.floor(t.timeLeft / 60), s = t.timeLeft % 60;
-            document.querySelector(`#${id} .timer-display`).innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function add() {
-            const input = document.getElementById('nomeInput');
-            if (input.value.trim()) {
-                jogadores.push({ nome: input.value.trim(), qtd: 0 });
-                input.value = ''; render(); saveToLocal();
-            }
-        }
-
-        function change(index, delta) {
-            jogadores[index].qtd = Math.max(0, jogadores[index].qtd + delta);
-            render(); saveToLocal();
-        }
-
-        function remove(index) {
-            const emAndamento = Object.values(timersData).some(t => t.running) || startTimePartida;
-            if (emAndamento) return alert("Finalize a partida antes de remover!");
-            if (confirm("Remover jogador?")) { jogadores.splice(index, 1); render(); saveToLocal(); }
-        }
-
-        function render() {
-            const lista = document.getElementById('lista');
-            const calcAtual = document.getElementById('calculoAtual');
-            const emAndamento = Object.values(timersData).some(t => t.running) || startTimePartida;
-            lista.innerHTML = '';
-            let total = 0;
-            jogadores.forEach((j, i) => {
-                total += j.qtd;
-                lista.innerHTML += `<li><span><strong>${j.nome}</strong></span>
-                <div class="controls">
-                    <button class="btn-minus" onclick="change(${i}, -1)">-</button>
-                    <span class="qty">${j.qtd}</span>
-                    <button class="btn-plus" onclick="change(${i}, 1)">+</button>
-                    <button class="btn-remove" ${emAndamento ? 'disabled' : ''} onclick="remove(${i})">X</button>
-                </div></li>`;
-            });
-            document.getElementById('totalTxt').innerText = total;
-            calcAtual.style.display = jogadores.length > 0 ? 'block' : 'none';
-
-            if (total > 0) {
-                const dist = calcularDistribuicao(total);
-                const dDiv = document.getElementById('dist');
-                dDiv.innerHTML = '';
-                dist.forEach((v, i) => dDiv.innerHTML += `<div class="result-box"><span>${i + 1}º Lugar</span><strong>${v} fichas</strong></div>`);
-            }
-        }
-
-        function finalizarPartida() {
-            const total = jogadores.reduce((acc, curr) => acc + curr.qtd, 0);
-            if (total === 0) return alert("Sem entradas para finalizar!");
-
-            const distFinal = calcularDistribuicao(total);
-            const endTime = new Date();
-            const durationMs = startTimePartida ? (endTime - startTimePartida) : 0;
-            const diffHrs = Math.floor(durationMs / 3600000), diffMins = Math.floor((durationMs % 3600000) / 60000);
-
-            // Salvar no histórico com o placar
-            historico.unshift({
-                inicio: startTimePartida ? startTimePartida.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--',
-                fim: endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                duracao: diffHrs > 0 ? `${diffHrs}h ${diffMins}m` : `${diffMins} min`,
-                total: total,
-                placar: distFinal // Aqui salvamos os valores de 1º, 2º...
-            });
-
-            // Reset
-            jogadores.forEach(j => j.qtd = 0);
-            startTimePartida = null;
-            Object.keys(timersData).forEach(id => resetIndividual(id, id === 't10' ? 600 : (id === 't7' ? 420 : 120)));
-            render(); renderHistorico(); saveToLocal();
-        }
-
-        function renderHistorico() {
-            const section = document.getElementById('historicoSection');
-            const listaH = document.getElementById('historicoLista');
-            if (historico.length === 0) { section.style.display = 'none'; return; }
-            section.style.display = 'block'; listaH.innerHTML = '';
-            historico.forEach((p, i) => {
-                let placarHtml = p.placar.map((v, idx) => `<span class="placar-item"><b>${idx + 1}º:</b> ${v}</span>`).join('');
-                listaH.innerHTML += `
-                <div class="history-card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
-                        <b>Partida #${historico.length - i}</b>
-                        <span style="color:var(--green); font-weight:bold;">Total: ${p.total}</span>
+        function abrirInterfacePagamentos() {
+            closeModal();
+            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+            distTemp = {};
+            let html = `<div style="background:#e9ecef; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9em"><strong>Total Mesa:</strong> ${totalMesa} entradas</div>`;
+            const ordenados = [...jogadores].sort((a,b)=>(a.posicao||99)-(b.posicao||99));
+            ordenados.forEach(p => {
+                const ganho = getPremiacao(p.posicao, totalMesa);
+                const isFreeroll = (ganho === p.qtd && p.qtd > 0);
+                const saldoObrigatorio = isFreeroll ? 0 : Math.max(0, p.qtd - ganho);
+                if (saldoObrigatorio > 0) distTemp[p.nome] = [{ para: "PENDENTE", qtd: 0, confirmado: false }];
+                html += `<div class="pay-row">
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <span style="display:flex; align-items:center; gap:8px">
+                            ${p.posicao ? `<span class="pos-badge">${p.posicao}º</span>` : ''} 
+                            <strong>${p.nome}</strong>
+                            ${isFreeroll ? `<span class="freeroll-badge">FREROLL</span>` : ''}
+                        </span>
+                        <div style="text-align:right; font-size:0.85em">
+                            <div style="color:var(--green)">Ganha: ${ganho}</div>
+                            <div style="color:var(--red)">Deve: ${p.qtd}</div>
+                        </div>
                     </div>
-                    <div style="color:var(--blue); font-size:0.85em; margin-bottom: 5px;">⏱ ${p.inicio} às ${p.fim} (${p.duracao})</div>
-                    <div class="placar-final">
-                        <strong>Placar:</strong><br>${placarHtml}
-                    </div>
+                    ${(!isFreeroll && saldoObrigatorio > 0) ? `<div id="destinos-${p.nome.replace(/\s/g,'_')}"></div>` : ''}
                 </div>`;
             });
+            setTimeout(() => {
+                openModal("Acerto de Contas", html, [{ text: "✓ Finalizar Partida", color: "var(--green)", action: () => validarFinalizacao(), keepOpen: true }, { text: "Cancelar", color: "var(--gray)" }]);
+                Object.keys(distTemp).forEach(nome => reRenderLinhas(nome));
+            }, 100);
         }
 
-        function limparHistorico() { if (confirm("Deseja apagar todo o histórico?")) { historico = []; saveToLocal(); renderHistorico(); } }
+        function reRenderLinhas(pagador) {
+            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+            const container = document.getElementById(`destinos-${pagador.replace(/\s/g,'_')}`);
+            if (!container) return;
+            let creditosRestantes = {};
+            jogadores.forEach(j => {
+                const ganho = getPremiacao(j.posicao, totalMesa);
+                creditosRestantes[j.nome] = Math.max(0, ganho - j.qtd);
+            });
+            Object.keys(distTemp).forEach(p => {
+                distTemp[p].forEach(d => { if(d.confirmado && d.para !== "PENDENTE" && d.para !== "SEM_PAGAR") creditosRestantes[d.para] -= d.qtd; });
+            });
+            const jPagador = jogadores.find(x => x.nome === pagador);
+            const saldoObrigatorio = Math.max(0, jPagador.qtd - getPremiacao(jPagador.posicao, totalMesa));
+            const jaPago = distTemp[pagador].filter(d => d.confirmado).reduce((a,b) => a+b.qtd, 0);
+            const faltaPagar = saldoObrigatorio - jaPago;
+            container.innerHTML = distTemp[pagador].map((item, idx) => {
+                const isConfirmed = item.confirmado;
+                let opts = `<option value="PENDENTE" ${item.para==='PENDENTE'?'selected':''}>⚠️ Selecionar...</option>`;
+                opts += `<option value="SEM_PAGAR" ${item.para==='SEM_PAGAR'?'selected':''} style="color:red; font-weight:bold">🛑 SAIU SEM PAGAR</option>`;
+                jogadores.forEach(j => {
+                    const disp = creditosRestantes[j.nome];
+                    if (j.nome !== pagador && (disp > 0 || item.para === j.nome)) opts += `<option value="${j.nome}" ${item.para===j.nome?'selected':''}>${j.nome} (Falta: ${disp})</option>`;
+                });
+                return `<div class="pay-input-group">
+                    <select ${isConfirmed?'disabled':''} onchange="setValAutomatico('${pagador}', ${idx}, this.value, ${faltaPagar})">${opts}</select>
+                    <input type="number" ${isConfirmed?'disabled':''} value="${item.qtd}" id="input-${pagador.replace(/\s/g,'_')}-${idx}" onchange="distTemp['${pagador}'][${idx}].qtd=parseInt(this.value)||0">
+                    <button class="${isConfirmed?'btn-remove':'btn-pay'}" onclick="handlePayClick('${pagador}', ${idx})">${isConfirmed?'Remover':'Pagar'}</button>
+                </div>`;
+            }).join('');
+        }
+
+        function setValAutomatico(pagador, idx, destino, faltaPagar) {
+            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+            distTemp[pagador][idx].para = destino;
+            if (destino === "SEM_PAGAR") {
+                distTemp[pagador][idx].qtd = faltaPagar;
+                document.getElementById(`input-${pagador.replace(/\s/g,'_')}-${idx}`).value = faltaPagar;
+            } else if (destino !== "PENDENTE") {
+                let jaSendoPago = 0;
+                Object.keys(distTemp).forEach(p => {
+                    distTemp[p].forEach(d => { if(d.confirmado && d.para === destino) jaSendoPago += d.qtd; });
+                });
+                const jDest = jogadores.find(x => x.nome === destino);
+                const ganhoLiquido = Math.max(0, getPremiacao(jDest.posicao, totalMesa) - jDest.qtd);
+                const valorSugerido = Math.min(faltaPagar, ganhoLiquido - jaSendoPago);
+                distTemp[pagador][idx].qtd = valorSugerido;
+                document.getElementById(`input-${pagador.replace(/\s/g,'_')}-${idx}`).value = valorSugerido;
+            }
+        }
+
+        function handlePayClick(pagador, idx) {
+            const item = distTemp[pagador][idx];
+            if (item.confirmado) {
+                distTemp[pagador].splice(idx, 1);
+                if (distTemp[pagador].length === 0) distTemp[pagador].push({ para: "PENDENTE", qtd: 0, confirmado: false });
+            } else {
+                if (item.para === "PENDENTE" || item.qtd <= 0) { alert("Selecione o destino e o valor."); return; }
+                item.confirmado = true;
+                const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+                const j = jogadores.find(x => x.nome === pagador);
+                const saldoObrigatorio = Math.max(0, j.qtd - getPremiacao(j.posicao, totalMesa));
+                const totalConfirmado = distTemp[pagador].filter(d => d.confirmado).reduce((a,b) => a+b.qtd, 0);
+                if (totalConfirmado < saldoObrigatorio) distTemp[pagador].push({ para: "PENDENTE", qtd: 0, confirmado: false });
+            }
+            reRenderLinhas(pagador);
+        }
+
+        function validarFinalizacao() {
+            const totalMesa = jogadores.reduce((a,b)=>a+b.qtd,0);
+            for (let p in distTemp) {
+                const j = jogadores.find(x=>x.nome===p);
+                const saldoObrigatorio = Math.max(0, j.qtd - getPremiacao(j.posicao, totalMesa));
+                const totalConfirmado = distTemp[p].filter(d=>d.confirmado).reduce((a,b)=>a+b.qtd, 0);
+                if (totalConfirmado !== saldoObrigatorio) { alert(`A soma de ${p} deve ser ${saldoObrigatorio}`); return; }
+            }
+            let logs = [];
+            let creditosGerais = {};
+            jogadores.forEach(j => { 
+                const g = getPremiacao(j.posicao, totalMesa);
+                creditosGerais[j.nome] = Math.max(0, g - j.qtd);
+            });
+            for (let p in distTemp) {
+                distTemp[p].forEach(d => {
+                    if(d.confirmado) {
+                        if(d.para === "SEM_PAGAR") logs.push(`<span class="debt-log">${p} DEVENDO ${d.qtd}</span>`);
+                        else {
+                            logs.push(`${p} → ${d.para} (${d.qtd})`);
+                            creditosGerais[d.para] -= d.qtd;
+                        }
+                    }
+                });
+            }
+            Object.keys(creditosGerais).forEach(nome => {
+                if(creditosGerais[nome] > 0) logs.push(`<span class="credit-log">${nome} FALTOU RECEBER ${creditosGerais[nome]}</span>`);
+            });
+            jogadores.forEach(j => { if(getPremiacao(j.posicao, totalMesa) === j.qtd && j.qtd > 0) logs.push(`${j.nome} (FREROLL)`); });
+            finalizarArquivamento(logs.join(' | ') || 'Acerto concluído');
+        }
+
+        function formatarDuracao(ms) {
+            const totalSegundos = Math.floor(ms / 1000);
+            const h = Math.floor(totalSegundos / 3600);
+            const m = Math.floor((totalSegundos % 3600) / 60);
+            const s = totalSegundos % 60;
+            return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
+        }
+
+        function finalizarArquivamento(financeiro) {
+            const endTimeReal = Date.now();
+            const duracaoMs = startTimeReal ? (endTimeReal - startTimeReal) : 0;
+            const total = jogadores.reduce((a,b)=>a+b.qtd,0);
+            const rankingData = jogadores.filter(j=>j.posicao).sort((a,b)=>a.posicao-b.posicao).map(j=>({
+                pos: j.posicao, nome: j.nome, 
+                ganho: getPremiacao(j.posicao, total), investido: j.qtd
+            }));
+
+            historico.unshift({ 
+                data: new Date().toLocaleString('pt-BR'), 
+                duracao: formatarDuracao(duracaoMs),
+                total, 
+                ranking: rankingData, 
+                detalhes: financeiro 
+            });
+
+            jogadores.forEach(j => { j.qtd = 0; j.eliminado = false; j.posicao = null; });
+            elimOrder = []; resetAllTimers(); gameStarted = false; startTimeReal = null;
+            render(); renderHistorico(); save(); closeModal();
+        }
+
+        function visualizarPartida(index) {
+            const h = historico[index];
+            let rankingHtml = h.ranking.map(r => {
+                const saldo = r.ganho - r.investido;
+                const saldoTexto = saldo >= 0 ? `(+${saldo})` : `(${saldo})`;
+                const corSaldo = saldo > 0 ? 'var(--green)' : (saldo < 0 ? 'var(--red)' : 'var(--gray)');
+                return `<div style="margin-bottom:5px">
+                    <span class="pos-badge">${r.pos}º</span> <strong>${r.nome}</strong> 
+                    <span style="color:${corSaldo}; font-weight:bold; font-size:0.9em">${saldoTexto} entradas</span>
+                </div>`;
+            }).join('');
+            let html = `<div style="background:#f8f9fa; padding:15px; border-radius:10px; border:1px solid #ddd">
+                <div style="margin-bottom:5px"><strong>Data:</strong> ${h.data}</div>
+                <div style="margin-bottom:10px"><strong>Duração Real:</strong> ${h.duracao || 'N/A'}</div>
+                <div style="margin-bottom:10px"><strong>Entradas Totais:</strong> ${h.total}</div>
+                <div style="margin-bottom:15px; padding-bottom:10px; border-bottom:2px solid #eee">
+                    <strong>Podium e Saldo:</strong><br>${rankingHtml}
+                </div>
+                <div><strong>Distribuição Financeira:</strong></div>
+                <div style="margin-top:8px">
+                    ${h.detalhes.split('|').map(d => `<div class="view-row">${d.trim()}</div>`).join('')}
+                </div>
+            </div>`;
+            openModal("Detalhes da Partida", html, [{text: "Fechar", color: "var(--dark)"}]);
+        }
+
+        // --- SISTEMA DE CRONÔMETRO ---
+        function toggleMasterPause() { 
+            isRunning = !isRunning; 
+            if(isRunning){ 
+                if(!startTimeReal) startTimeReal = Date.now(); // Marca o início real da partida
+                gameStarted = true; 
+                lastTime = Date.now();
+                masterInterval = setInterval(tick, 200);
+            } else {
+                clearInterval(masterInterval);
+            }
+            const b = document.getElementById('masterPause');
+            b.innerText = isRunning ? "PAUSAR" : "RETOMAR";
+            b.style.background = isRunning ? "var(--orange)":"var(--green)";
+            render(); 
+        }
+
+        function tick() {
+            if (!isRunning) return;
+            const now = Date.now();
+            const delta = (now - lastTime) / 1000;
+            if (delta >= 1) {
+                const secondsToAdvance = Math.floor(delta);
+                elapsedSeconds += secondsToAdvance;
+                lastTime += secondsToAdvance * 1000;
+                if (elapsedSeconds >= activeLevel) {
+                    elapsedSeconds = 0;
+                    const currentIndex = levels.indexOf(activeLevel);
+                    selectLevel(levels[(currentIndex + 1) % levels.length]);
+                }
+                updateTimerDisplays();
+            }
+        }
+
+        function selectLevel(l) { 
+            activeLevel = l; 
+            levels.forEach(id => { document.getElementById(`card-${id}`).className = (id === l ? 'timer-card active' : 'timer-card'); });
+            updateTimerDisplays(); 
+        }
+
+        function updateTimerDisplays() { 
+            levels.forEach(l => { 
+                let s = (l === activeLevel) ? (l - elapsedSeconds) : l; 
+                if (s < 0) s = 0;
+                document.getElementById(`disp-${l}`).innerText = `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; 
+            }); 
+        }
+
+        function resetAllTimers() { clearInterval(masterInterval); isRunning = false; elapsedSeconds = 0; lastTime = null; selectLevel(600); document.getElementById('masterPause').innerText = "INICIAR PARTIDA"; }
+
+        // --- GESTÃO DE JOGADORES ---
+        function handlePlayerAction(i) { const j=jogadores[i]; if(!gameStarted && j.qtd===0){ openModal("Remover",`Remover ${j.nome}?`,[{text:"Sim",color:"var(--red)",action:()=>{jogadores.splice(i,1);render();save();}},{text:"Não"}]); } else if(j.eliminado){ j.eliminado=false; elimOrder=elimOrder.map(g=>g.filter(x=>x!==i)).filter(g=>g.length>0); render(); save(); } else { openModal("Sair",`Como ${j.nome} saiu?`,[{text:"Normal",color:"var(--red)",action:()=>confirmElim(i,false)},{text:"Empate",color:"var(--orange)",action:()=>confirmElim(i,true)}]); } }
+        function confirmElim(idx, empate) { jogadores[idx].eliminado=true; if(empate && elimOrder.length>0) elimOrder[elimOrder.length-1].push(idx); else elimOrder.push([idx]); render(); save(); const ativos = jogadores.filter(j => !j.eliminado); if(ativos.length === 1 && jogadores.length > 1){ ativos[0].posicao = 1; render(); setTimeout(() => { openModal("🏆 Fim", `Vencedor: ${ativos[0].nome}`, [{text:"Pagamentos",color:"var(--green)",action:()=>abrirInterfacePagamentos()},{text:"Ajustar"}]); }, 400); } }
+        function change(i,d){ jogadores[i].qtd=Math.max(0,jogadores[i].qtd+d); render(); save(); }
+        
+        function render() { 
+            const lista=document.getElementById('lista'); 
+            lista.innerHTML=''; 
+            let posElim = jogadores.length; 
+            let tempPos = {}; 
+            let totalEntradas = 0;
+            elimOrder.forEach(g => { g.forEach(idx => tempPos[idx] = posElim - (g.length - 1)); posElim -= g.length; }); 
+            const vencedor = jogadores.find(j => !j.eliminado); 
+            jogadores.forEach((j,i)=>{ 
+                totalEntradas += j.qtd;
+                let pos = null; 
+                if (j.eliminado) { pos = tempPos[i]; } else if (vencedor && (jogadores.filter(x => !x.eliminado).length === 1) && jogadores.length > 1) { pos = 1; } j.posicao = pos; 
+                const canRem = !gameStarted && j.qtd === 0; 
+                lista.innerHTML+=`<li class="${j.eliminado?'out':''}"><div>${pos ? `<span class="pos-badge">${pos}º</span>` : ''}<strong>${j.nome}</strong></div><div style="display:flex;align-items:center;gap:5px"><button onclick="change(${i},-1)">-</button><span>${j.qtd}</span><button onclick="change(${i},1)">+</button><button class="btn-action" style="background:${canRem?'#6c757d':'#343a40'}" onclick="handlePlayerAction(${i})">${canRem?'Remover':(j.eliminado?'Reviver':'Sair')}</button></div></li>`; 
+            }); 
+            document.getElementById('totalDisplay').innerText = `TOTAL DE ENTRADAS: ${totalEntradas}`;
+        }
+
+        function renderHistorico() { const c=document.getElementById('historicoSection'); if(historico.length===0){c.style.display='none';return;} c.style.display='block'; document.getElementById('historicoLista').innerHTML=historico.map((h, idx)=>{ 
+            const podioCurto = Array.isArray(h.ranking) ? h.ranking.slice(0, 3).map(r => `${r.pos}º ${r.nome}`).join(' | ') : h.ranking;
+            return `<div class="history-card" onclick="visualizarPartida(${idx})"><b>${h.data}</b><br><small>${podioCurto}</small></div>`
+        }).join(''); }
+
+        window.onload=()=>{ selectLevel(600); render(); renderHistorico(); };
     </script>
 </body>
-
 </html>
